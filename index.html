@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>🏆 البطولة</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<style>
+:root{
+  --bg:#05060d; --card:#111427; --card2:#1a1f38;
+  --gold:#ffd700; --cyan:#00e5ff; --purple:#a855f7;
+  --green:#22e07a; --red:#ff3b5c; --orange:#ff8c42;
+  --text:#eaf2ff; --t2:rgba(234,242,255,.65); --t3:rgba(234,242,255,.35);
+  --border:rgba(120,150,255,.14); --border2:rgba(120,150,255,.28);
+}
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Tajawal','Segoe UI',system-ui,sans-serif;-webkit-tap-highlight-color:transparent;backface-visibility:hidden}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);overscroll-behavior:none;position:fixed;inset:0;text-rendering:optimizeSpeed}
+
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none;contain:strict}
+.star{position:absolute;background:#fff;border-radius:50%;opacity:.5}
+.nebula{position:fixed;border-radius:50%;filter:blur(130px);opacity:.16;pointer-events:none;z-index:0;contain:strict}
+.neb1{width:520px;height:520px;background:radial-gradient(circle,#a855f7,transparent);top:-180px;right:-180px}
+.neb2{width:460px;height:460px;background:radial-gradient(circle,#00e5ff,transparent);bottom:-180px;left:-180px}
+
+/* ============ NEWS TICKER (شريط علوي متحرك) ============ */
+.news-ticker{position:fixed;top:0;left:0;right:0;height:28px;background:linear-gradient(90deg,#0a0e22,#1a1f38,#0a0e22);border-bottom:1.5px solid rgba(255,215,0,.4);z-index:500;overflow:hidden;display:flex;align-items:center;box-shadow:0 2px 12px rgba(0,0,0,.5)}
+.news-ticker::before{content:'🏆';position:absolute;right:0;top:0;bottom:0;width:32px;background:linear-gradient(135deg,#ffd700,#ff8c42);display:flex;align-items:center;justify-content:center;font-size:14px;z-index:2;box-shadow:-2px 0 8px rgba(0,0,0,.5)}
+.ticker-content{display:flex;white-space:nowrap;animation:tickerScroll 40s linear infinite;padding-right:40px;gap:0}
+.ticker-item{display:inline-flex;align-items:center;gap:6px;padding:0 24px;font-size:11px;font-weight:800;color:var(--gold);letter-spacing:.3px}
+.ticker-item .dot{width:5px;height:5px;border-radius:50%;background:var(--cyan);box-shadow:0 0 6px var(--cyan);flex-shrink:0}
+.ticker-item.win{color:var(--green)}
+.ticker-item.lose{color:var(--red)}
+.ticker-item.cy{color:var(--cyan)}
+.ticker-item.pu{color:var(--purple)}
+@keyframes tickerScroll{from{transform:translateX(100%)}to{transform:translateX(-100%)}}
+
+/* ============ AUTH ============ */
+.auth{position:fixed;inset:0;background:radial-gradient(circle at center,#14082e,#05060d);display:none;align-items:center;justify-content:center;z-index:2000;padding:16px}
+.auth.on{display:flex}
+.auth-card{background:var(--card);padding:32px 24px;border-radius:24px;border:2px solid var(--cyan);box-shadow:0 0 24px rgba(0,229,255,.4);width:100%;max-width:420px;text-align:center}
+.auth-icon{font-size:64px;margin-bottom:10px;filter:drop-shadow(0 0 20px rgba(0,229,255,.9))}
+.auth-title{font-size:24px;font-weight:900;background:linear-gradient(135deg,#00e5ff,#a855f7,#ff2e63);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:6px}
+.auth-sub{font-size:12px;color:var(--t2);margin-bottom:22px}
+.inp{width:100%;padding:13px 16px;margin-bottom:12px;border-radius:12px;border:1.5px solid var(--border2);background:rgba(255,255,255,.05);color:var(--text);font-size:13px;outline:none;font-family:inherit}
+.inp:focus{border-color:var(--cyan)}
+.btn-main{width:100%;padding:14px;background:linear-gradient(135deg,#00e5ff,#a855f7);color:#fff;border:none;border-radius:12px;font-size:15px;font-weight:900;cursor:pointer}
+.btn-main:active{transform:scale(.97)}
+.btn-main:disabled{opacity:.6}
+.err{background:rgba(255,59,92,.15);border:1px solid rgba(255,59,92,.4);color:#ff8ba3;padding:9px;border-radius:9px;font-size:11px;margin-bottom:12px;display:none}
+.err.on{display:block}
+
+/* ============ APP ============ */
+.app{position:fixed;inset:0;top:28px;display:flex;flex-direction:column;z-index:5}
+.topbar{padding:6px 10px;background:rgba(5,6,13,.98);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:6px;flex-shrink:0;z-index:100;height:46px}
+.me{display:flex;align-items:center;gap:6px;min-width:0}
+.me-av{width:34px;height:34px;border-radius:50%;border:2px solid var(--cyan);display:flex;align-items:center;justify-content:center;font-size:16px;background:linear-gradient(135deg,#1a1f38,#0b0e1a);overflow:hidden;flex-shrink:0}
+.me-av img{width:100%;height:100%;object-fit:contain}
+.me-nm{font-size:11px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100px}
+.tb-btns{display:flex;gap:5px;flex-shrink:0}
+.tb-btn{background:rgba(255,255,255,.05);border:1.5px solid var(--border2);color:var(--cyan);width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;position:relative}
+.tb-btn.gold{color:var(--gold);border-color:rgba(255,215,0,.4)}
+.tb-btn:active{transform:scale(.9)}
+
+/* ============ COMPACT HEADER (شريط حالة مصغر) ============ */
+.compact-header{padding:5px 10px;background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(255,140,66,.06));border-bottom:1px solid rgba(255,215,0,.25);display:flex;align-items:center;justify-content:space-between;gap:6px;flex-shrink:0;height:34px;font-size:10px;font-weight:900}
+.ch-item{display:flex;align-items:center;gap:3px;color:var(--gold);white-space:nowrap}
+.ch-item.cy{color:var(--cyan)}
+.ch-item.gr{color:var(--green)}
+.ch-item.rd{color:var(--red)}
+
+/* ============ TOURNAMENT SCREEN ============ */
+.tourn-screen{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+.tourn-body{flex:1;position:relative;overflow:hidden;touch-action:none;display:flex;align-items:center;justify-content:center;min-height:0}
+.tourn-globe-wrap{position:relative;width:min(85vw,85vh);height:min(85vw,85vh);max-width:600px;max-height:600px;perspective:1200px;touch-action:none}
+.tourn-globe{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
+.t-player{position:absolute;left:50%;top:50%;width:52px;height:52px;margin:-26px 0 0 -26px;cursor:pointer;transform-style:preserve-3d;will-change:transform;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:auto}
+.t-player-av{width:42px;height:42px;border-radius:50%;border:2px solid var(--cyan);background:radial-gradient(circle at 30% 30%,rgba(0,229,255,.3),rgba(10,12,25,.95));display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;box-shadow:0 0 10px rgba(0,229,255,.5);position:relative}
+.t-player-av img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.t-player-nm{position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:1px;font-size:7px;font-weight:800;color:#fff;background:rgba(5,6,13,.9);padding:1px 4px;border-radius:5px;border:1px solid var(--border2);white-space:nowrap;max-width:60px;overflow:hidden;text-overflow:ellipsis}
+.t-player.champion .t-player-av{border-color:#ffd700;box-shadow:0 0 22px rgba(255,215,0,.9)}
+.t-player.champion .t-player-av::after{content:'👑';position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:16px}
+.t-player.in-match .t-player-av{border-color:#ff3b5c;box-shadow:0 0 16px rgba(255,59,92,.9);animation:pulseRed 1.2s infinite}
+@keyframes pulseRed{0%,100%{box-shadow:0 0 16px rgba(255,59,92,.9)}50%{box-shadow:0 0 24px rgba(255,59,92,1)}}
+.t-player.in-match .t-player-av::before{content:'⚔️';position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:14px;animation:pulseRed 1.2s infinite}
+.tourn-hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);font-size:9px;color:var(--t2);background:rgba(5,6,13,.85);padding:4px 12px;border-radius:15px;border:1px solid var(--border2);white-space:nowrap;z-index:10;pointer-events:none}
+
+.tourn-actions{padding:8px 10px;background:rgba(5,6,13,.98);border-top:1px solid var(--border);display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap}
+.tourn-btn{flex:1;min-width:100px;padding:10px 8px;border-radius:11px;border:none;color:#fff;font-weight:900;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px}
+.tourn-btn.join{background:linear-gradient(135deg,#22e07a,#00b8a9)}
+.tourn-btn.leave{background:linear-gradient(135deg,#ff3b5c,#c0392b)}
+.tourn-btn.start{background:linear-gradient(135deg,#ffd700,#ff8c42)}
+.tourn-btn.history{background:linear-gradient(135deg,#a855f7,#7c3aed)}
+.tourn-btn.cancel{background:linear-gradient(135deg,#dc2626,#7f1d1d)}
+.tourn-btn.pending{background:rgba(255,255,255,.15);color:var(--t2);pointer-events:none}
+.tourn-btn.explore{background:linear-gradient(135deg,#00e5ff,#3b82f6)}
+.tourn-btn:active{transform:scale(.96)}
+
+/* ============ MODALS ============ */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.88);display:none;justify-content:center;align-items:center;z-index:3500;padding:14px}
+.modal.on{display:flex}
+.mc{background:#111427;background-image:linear-gradient(135deg,#111427,#1a1f38);padding:18px;border-radius:18px;width:100%;max-width:480px;border:2px solid var(--cyan);max-height:88vh;overflow-y:auto;position:relative}
+.mh{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:10px;border-bottom:1.5px solid var(--border)}
+.mt{font-size:15px;font-weight:900;background:linear-gradient(135deg,#00e5ff,#a855f7);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;display:flex;align-items:center;gap:5px}
+.mx{background:rgba(255,59,92,.15);border:1.5px solid rgba(255,59,92,.4);color:var(--red);width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.empty{text-align:center;padding:30px 20px;color:var(--t3);font-size:12px}
+.empty i{font-size:40px;display:block;margin-bottom:8px;opacity:.5}
+.save-btn{width:100%;padding:12px;background:linear-gradient(135deg,#22e07a,#00b8a9);color:#fff;border:none;border-radius:11px;font-size:12px;font-weight:900;cursor:pointer;margin-top:8px}
+.sec-title{font-size:11px;font-weight:900;color:var(--cyan);margin-bottom:6px;display:flex;align-items:center;gap:4px}
+.size-row{display:flex;gap:8px;margin-bottom:10px}
+.size-row>div{flex:1}
+.size-lbl{font-size:10px;color:var(--t2);margin-bottom:4px;font-weight:800}
+
+.tourn-size-options{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-start;margin-bottom:10px}
+.tourn-size-btn{padding:5px 10px;border-radius:8px;border:1.5px solid var(--border2);background:rgba(255,255,255,.04);color:var(--t2);font-size:10px;font-weight:900;cursor:pointer;min-width:38px}
+.tourn-size-btn.on{background:linear-gradient(135deg,rgba(255,215,0,.25),rgba(255,140,66,.15));border-color:var(--gold);color:var(--gold)}
+.tourn-size-btn:disabled{opacity:.4;pointer-events:none}
+
+.hist-card{background:linear-gradient(135deg,rgba(255,215,0,.1),rgba(255,140,66,.05));border:1.5px solid rgba(255,215,0,.3);border-radius:12px;padding:10px;margin-bottom:8px;cursor:pointer}
+.hist-card:active{transform:scale(.98)}
+.hist-card-img{width:100%;height:110px;border-radius:9px;background-size:cover;background-position:center;background-color:rgba(0,0,0,.4);margin-bottom:8px;display:flex;align-items:center;justify-content:center;font-size:30px;overflow:hidden}
+.hist-card-title{font-size:13px;font-weight:900;color:var(--gold);margin-bottom:5px}
+.hist-card-meta{display:flex;gap:8px;font-size:9px;color:var(--t2);flex-wrap:wrap}
+.hist-card-meta span{display:flex;align-items:center;gap:3px}
+.hist-card-champ{font-size:10px;font-weight:900;color:#fff;margin-top:5px;display:flex;align-items:center;gap:4px}
+
+.detail-hero{width:100%;height:130px;border-radius:12px;background-size:cover;background-position:center;background-color:rgba(0,0,0,.4);margin-bottom:12px;display:flex;align-items:center;justify-content:center;font-size:44px;overflow:hidden;position:relative}
+.detail-hero::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 50%,rgba(0,0,0,.85))}
+.detail-hero-title{position:absolute;bottom:8px;right:10px;left:10px;z-index:2}
+.detail-hero-title h3{font-size:16px;font-weight:900;color:#fff}
+.detail-hero-title p{font-size:10px;color:var(--t2);margin-top:2px}
+.detail-desc{font-size:11px;color:var(--t2);line-height:1.7;background:rgba(0,229,255,.06);border:1px solid rgba(0,229,255,.2);border-radius:10px;padding:10px;margin-bottom:12px}
+.rank-row{display:flex;align-items:center;gap:8px;padding:9px;background:linear-gradient(135deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border-radius:10px;margin-bottom:6px;border:1.5px solid var(--border)}
+.rank-row.p1{background:linear-gradient(135deg,rgba(255,215,0,.25),rgba(255,140,66,.15));border-color:var(--gold)}
+.rank-row.p2{background:linear-gradient(135deg,rgba(192,192,192,.2),rgba(192,192,192,.05));border-color:#c0c0c0}
+.rank-row.p3{background:linear-gradient(135deg,rgba(205,127,50,.2),rgba(205,127,50,.05));border-color:#cd7f32}
+.rank-row.p4{background:linear-gradient(135deg,rgba(160,160,160,.15),rgba(160,160,160,.03));border-color:#808080}
+.rank-row .rank-pos{font-size:20px;font-weight:900;min-width:30px;text-align:center}
+.rank-row.p1 .rank-pos{color:var(--gold)}
+.rank-row.p2 .rank-pos{color:#c0c0c0}
+.rank-row.p3 .rank-pos{color:#cd7f32}
+.rank-row.p4 .rank-pos{color:#a0a0a0}
+.rank-row .rank-av{width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;border:2px solid currentColor;flex-shrink:0}
+.rank-row.p1 .rank-av{border-color:var(--gold);color:var(--gold)}
+.rank-row.p2 .rank-av{border-color:#c0c0c0;color:#c0c0c0}
+.rank-row.p3 .rank-av{border-color:#cd7f32;color:#cd7f32}
+.rank-row.p4 .rank-av{border-color:#808080;color:#a0a0a0}
+.rank-row .rank-av img{width:100%;height:100%;object-fit:cover}
+.rank-row .rank-info{flex:1;min-width:0}
+.rank-row .rank-nm{font-size:12px;font-weight:900;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.rank-row .rank-stats{font-size:9px;color:var(--t2);display:flex;gap:6px}
+.rank-row .rank-stats .w{color:var(--green)}
+.rank-row .rank-stats .p{color:var(--gold)}
+.rank-row .rank-badge{font-size:8px;padding:3px 6px;border-radius:5px;font-weight:900;flex-shrink:0}
+.rank-row.p1 .rank-badge{background:var(--gold);color:#000}
+.rank-row.p2 .rank-badge{background:#c0c0c0;color:#000}
+.rank-row.p3 .rank-badge{background:#cd7f32;color:#fff}
+.rank-row.p4 .rank-badge{background:#808080;color:#fff}
+
+.pending-item{display:flex;align-items:center;gap:8px;padding:8px;background:rgba(255,255,255,.04);border:1.5px solid var(--border);border-radius:10px;margin-bottom:6px}
+.pending-item .pav{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#1a1f38,#0b0e1a);display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;border:2px solid var(--cyan);flex-shrink:0}
+.pending-item .pav img{width:100%;height:100%;object-fit:cover}
+.pending-item .pinfo{flex:1;min-width:0}
+.pending-item .pnm{font-size:11px;font-weight:900;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.pending-item .pbtns{display:flex;gap:4px;flex-shrink:0}
+.pending-item .pbtns button{padding:5px 9px;border-radius:7px;border:none;color:#fff;font-size:10px;font-weight:800;cursor:pointer}
+.pending-item .pbtns .acc{background:linear-gradient(135deg,#22e07a,#27ae60)}
+.pending-item .pbtns .rej{background:linear-gradient(135deg,#ff3b5c,#c0392b)}
+.admin-tabs-tourn{display:flex;gap:4px;margin-bottom:8px}
+.admin-tabs-tourn .at{flex:1;padding:7px;text-align:center;background:rgba(255,255,255,.04);border:1.5px solid var(--border);border-radius:9px;color:var(--t2);font-size:10px;font-weight:800;cursor:pointer}
+.admin-tabs-tourn .at.on{background:linear-gradient(135deg,rgba(255,215,0,.2),rgba(255,140,66,.15));border-color:var(--gold);color:var(--gold)}
+.tourn-player-row{display:flex;align-items:center;gap:8px;padding:7px;background:rgba(255,255,255,.04);border-radius:9px;margin-bottom:5px;border:1.5px solid var(--border)}
+.tourn-player-row.eliminated{opacity:.4;text-decoration:line-through}
+.tourn-player-row .tp-av{width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;font-size:15px;overflow:hidden;border:2px solid var(--cyan);flex-shrink:0}
+.tourn-player-row .tp-av img{width:100%;height:100%;object-fit:cover}
+.tourn-player-row .tp-info{flex:1;min-width:0}
+.tourn-player-row .tp-nm{font-size:11px;font-weight:900;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tourn-player-row .tp-stat{font-size:9px;color:var(--gold);margin-top:2px}
+.tourn-player-row .tp-badge{font-size:8px;padding:2px 6px;border-radius:5px;font-weight:800}
+.tourn-player-row .tp-badge.active{background:rgba(34,224,122,.2);color:var(--green)}
+.tourn-player-row .tp-badge.out{background:rgba(255,59,92,.2);color:var(--red)}
+.tourn-player-row .tp-badge.champion{background:rgba(255,215,0,.25);color:var(--gold)}
+
+.preview-img{width:100%;height:90px;border-radius:9px;background:rgba(10,12,25,.9);border:1.5px solid var(--border2);background-size:cover;background-position:center;margin-bottom:8px;display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:11px;font-weight:700}
+
+/* ============ ARENA ============ */
+.arena{position:fixed;inset:0;z-index:2000;background:linear-gradient(180deg,#05060d 0%,#0d1226 50%,#05060d 100%);display:none;flex-direction:column;overflow:hidden}
+.arena.on{display:flex}
+.arena-top{padding:4px 6px;background:rgba(5,6,13,.95);border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:4px;z-index:20;flex-shrink:0}
+.arena-actions{display:flex;gap:3px}
+.leave-btn,.chat-game-btn{padding:5px 8px;border-radius:8px;border:none;color:#fff;font-weight:900;font-size:9px;cursor:pointer;display:flex;align-items:center;gap:3px;flex-shrink:0}
+.leave-btn{background:linear-gradient(135deg,#ff3b5c,#c0392b)}
+.chat-game-btn{background:linear-gradient(135deg,#3b82f6,#2563eb)}
+.arena-hud{display:flex;align-items:center;gap:4px;flex:1;justify-content:center}
+.hud-player{display:flex;align-items:center;gap:3px;padding:2px 5px;border-radius:8px;background:rgba(255,255,255,.05);border:1.5px solid var(--border)}
+.hud-player.me{border-color:var(--cyan)}
+.hud-player.enemy{border-color:var(--red)}
+.hud-av{width:22px;height:22px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:12px;background:linear-gradient(135deg,#1a1f38,#0b0e1a);flex-shrink:0;overflow:hidden}
+.hud-av img{width:100%;height:100%;object-fit:contain}
+.hud-meta{display:flex;flex-direction:column;gap:1px}
+.hud-nm{font-size:7px;font-weight:900;color:var(--text);white-space:nowrap;max-width:50px;overflow:hidden;text-overflow:ellipsis}
+.hp-bar{width:50px;height:5px;border-radius:4px;background:rgba(255,255,255,.1);overflow:hidden;position:relative}
+.hp-fill{height:100%;background:linear-gradient(90deg,#22e07a,#00e5ff)}
+.hp-fill.enemy{background:linear-gradient(90deg,#ff3b5c,#ff8c42)}
+.hp-txt{font-size:6px;font-weight:900;color:#fff;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-shadow:0 1px 2px #000}
+.match-timer{font-size:10px;font-weight:900;color:#fff;background:linear-gradient(135deg,#a855f7,#7c3aed);padding:3px 8px;border-radius:7px;border:1.5px solid var(--purple);min-width:48px;text-align:center;font-family:'Courier New',monospace}
+.match-timer.danger{background:linear-gradient(135deg,#ff3b5c,#c0392b);animation:blinkDanger .6s infinite}
+@keyframes blinkDanger{0%,100%{opacity:1}50%{opacity:.5}}
+
+.arena-field{flex:1;position:relative;overflow:hidden;touch-action:none;background:#0a0d1a}
+.arena-bg{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:.7}
+.arena-overlay{position:absolute;inset:0;background:radial-gradient(circle at center,transparent 40%,rgba(5,6,13,.7) 100%)}
+
+.fighter{position:absolute;top:0;left:0;pointer-events:none;z-index:10;display:flex;flex-direction:column;align-items:center;justify-content:center;will-change:transform;transform:translateZ(0)}
+.fighter .fig-body{display:flex;align-items:center;justify-content:center}
+.fighter.me .fig-body{filter:drop-shadow(0 0 10px #00e5ff)}
+.fighter.enemy .fig-body{filter:drop-shadow(0 0 10px #ff3b5c)}
+.fighter .fig-body img{width:100%;height:100%;object-fit:contain;display:block}
+.fighter .fig-hp{margin-top:2px;height:5px;border-radius:4px;background:rgba(0,0,0,.5);overflow:hidden;border:1px solid rgba(255,255,255,.3);width:100%}
+.fighter .fig-hp-fill{height:100%;background:linear-gradient(90deg,#22e07a,#00e5ff)}
+.fighter.enemy .fig-hp-fill{background:linear-gradient(90deg,#ff3b5c,#ff8c42)}
+
+.projectile{position:absolute;top:0;left:0;pointer-events:none;z-index:8;display:flex;align-items:center;justify-content:center;will-change:transform;transform:translateZ(0)}
+.projectile img{width:100%;height:100%;object-fit:contain}
+.projectile.noimg{border-radius:50%}
+.projectile.noimg.mine{background:radial-gradient(circle,#00e5ff,#3b82f6);box-shadow:0 0 14px #00e5ff;width:18px;height:18px}
+.projectile.noimg.ice{background:radial-gradient(circle,#a8f0ff,#00b8d4);box-shadow:0 0 14px #a8f0ff;width:18px;height:18px}
+.projectile.noimg.fire{background:radial-gradient(circle,#ffd700,#ff3b5c);box-shadow:0 0 14px #ff8c42;width:18px;height:18px}
+.projectile.noimg.enemy{background:radial-gradient(circle,#ff3b5c,#c0392b);box-shadow:0 0 14px #ff3b5c;width:18px;height:18px}
+
+.hit-fx{position:absolute;top:0;left:0;width:50px;height:50px;border-radius:50%;pointer-events:none;z-index:15;background:radial-gradient(circle,rgba(0,229,255,.8),transparent 70%)}
+.hit-fx.red{background:radial-gradient(circle,rgba(255,59,92,.8),transparent 70%)}
+
+.arena-bottom{padding:5px 6px;background:rgba(5,6,13,.95);border-top:1px solid var(--border);display:flex;flex-direction:column;gap:4px;z-index:20;flex-shrink:0}
+.arena-info{text-align:center;font-size:9px;font-weight:900;color:var(--gold);padding:4px 8px;background:linear-gradient(135deg,rgba(255,215,0,.12),rgba(255,140,66,.08));border:1.5px solid rgba(255,215,0,.4);border-radius:8px}
+.attack-btn{width:100%;padding:11px;border-radius:11px;border:none;cursor:pointer;font-size:12px;font-weight:900;color:#fff;background:linear-gradient(135deg,#ff3b5c,#ff8c42);display:flex;align-items:center;justify-content:center;gap:5px;touch-action:manipulation}
+.attack-btn:active{transform:scale(.97)}
+.attack-btn .atk-ico{width:20px;height:20px;object-fit:contain;display:inline-block;vertical-align:middle}
+
+.arena-msg{position:absolute;top:60px;left:50%;transform:translate3d(-50%,-20px,0) scale(.9);z-index:50;background:linear-gradient(135deg,rgba(17,20,39,.97),rgba(26,31,56,.97));border:2px solid var(--cyan);border-radius:14px;padding:8px 12px;display:flex;align-items:center;gap:8px;opacity:0;pointer-events:none;transition:transform .25s,opacity .25s;max-width:88vw}
+.arena-msg.on{transform:translate3d(-50%,0,0) scale(1);opacity:1}
+.arena-msg-av{width:36px;height:36px;border-radius:50%;border:2px solid var(--gold);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1f38,#0b0e1a);font-size:16px;font-weight:900}
+.arena-msg-av img{width:100%;height:100%;object-fit:cover}
+.arena-msg-body{flex:1;min-width:0}
+.arena-msg-name{font-size:10px;font-weight:900;color:var(--gold);margin-bottom:2px}
+.arena-msg-txt{font-size:12px;font-weight:700;color:#fff;word-break:break-word}
+
+.chat-overlay{position:absolute;left:50%;bottom:70px;transform:translateX(-50%);display:none;gap:5px;padding:6px;background:linear-gradient(135deg,rgba(17,20,39,.98),rgba(26,31,56,.98));border:2px solid var(--cyan);border-radius:12px;z-index:60;width:min(92%,420px)}
+.chat-overlay.on{display:flex}
+.chat-input{flex:1;padding:8px 10px;background:rgba(255,255,255,.06);border:1.5px solid var(--border2);border-radius:9px;color:#fff;font-size:11px;outline:none;font-family:inherit}
+.chat-input:focus{border-color:var(--cyan)}
+.chat-send-btn{padding:8px 12px;border-radius:9px;border:none;background:linear-gradient(135deg,#3b82f6,#2563eb);color:#fff;font-weight:900;cursor:pointer;font-size:13px}
+
+/* ============ TOAST / SMSG ============ */
+.toast{position:fixed;top:60px;left:50%;transform:translate3d(-50%,-120px,0);background:#111427;border:1.5px solid var(--cyan);color:var(--text);padding:9px 15px;border-radius:11px;z-index:5000;font-size:11px;font-weight:700;display:flex;align-items:center;gap:6px;opacity:0;transition:transform .3s,opacity .3s;max-width:90%;pointer-events:none}
+.toast.on{transform:translate3d(-50%,0,0);opacity:1}
+.smsg{position:fixed;top:50%;left:50%;transform:translate3d(-50%,-50%,0);z-index:5000;padding:14px 20px;border-radius:18px;background:#111427;border:3px solid var(--cyan);display:flex;flex-direction:column;align-items:center;gap:6px;min-width:200px;max-width:88vw;pointer-events:none}
+.smsg-ico{font-size:40px}
+.smsg-txt{font-size:13px;font-weight:900;color:#fff;text-align:center}
+.smsg.win{border-color:var(--gold)}
+.smsg.win .smsg-ico{color:var(--gold);font-size:52px}
+.smsg.win .smsg-txt{color:var(--gold);font-size:16px}
+.smsg.lose{border-color:var(--red)}
+.smsg.lose .smsg-ico{color:var(--red)}
+.smsg.lose .smsg-txt{color:var(--red)}
+
+@media(max-width:380px){
+  .tourn-size-btn{padding:4px 7px;font-size:9px;min-width:34px}
+  .t-player-av{width:34px;height:34px;font-size:14px}
+  .me-nm{max-width:70px;font-size:10px}
+}
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+<div class="nebula neb1"></div>
+<div class="nebula neb2"></div>
+
+<!-- NEWS TICKER -->
+<div class="news-ticker">
+  <div class="ticker-content" id="tickerContent">
+    <div class="ticker-item"><span class="dot"></span> 🏆 مرحباً بك في البطولة الكبرى</div>
+    <div class="ticker-item cy"><span class="dot"></span> ⚔️ سجّل دخولك واشترك الآن</div>
+  </div>
+</div>
+
+<!-- AUTH -->
+<div class="auth" id="authScreen">
+  <div class="auth-card">
+    <div class="auth-icon">🏆</div>
+    <div class="auth-title">البطولة الكبرى</div>
+    <div class="auth-sub">سجّل دخولك للمشاركة</div>
+    <div class="err" id="authErr"></div>
+    <input type="email" class="inp" id="email" placeholder="البريد الإلكتروني" autocomplete="email">
+    <input type="password" class="inp" id="pass" placeholder="كلمة المرور" autocomplete="current-password">
+    <button class="btn-main" id="loginBtn" onclick="handleLogin()">
+      <i class="bi bi-box-arrow-in-right"></i> تسجيل الدخول
+    </button>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="app" style="display:none">
+  <div class="topbar">
+    <div class="me">
+      <div class="me-av" id="hdrAvatar">🧙</div>
+      <div class="me-nm" id="hdrName">---</div>
+    </div>
+    <div class="tb-btns">
+      <button class="tb-btn gold" onclick="openTournAdmin()" id="adminBtn" style="display:none"><i class="bi bi-gear-fill"></i></button>
+      <button class="tb-btn gold" onclick="openTournHistory()"><i class="bi bi-clock-history"></i></button>
+    </div>
+  </div>
+
+  <div class="tourn-screen">
+    <div class="compact-header">
+      <div class="ch-item"><i class="bi bi-trophy-fill"></i> <span id="hdrTitle">البطولة</span></div>
+      <div class="ch-item cy"><i class="bi bi-people-fill"></i> <span id="hdrCount">0/0</span></div>
+      <div class="ch-item gr"><i class="bi bi-hourglass-split"></i> <span id="hdrStatus">-</span></div>
+      <div class="ch-item"><i class="bi bi-flag-fill"></i> <span id="hdrRound">-</span></div>
+    </div>
+
+    <div class="tourn-body" id="tournBody">
+      <div class="tourn-globe-wrap" id="tournGlobeWrap">
+        <div class="tourn-globe" id="tournGlobe"></div>
+      </div>
+          </div>
+
+    <div class="tourn-actions" id="tournActions"></div>
+  </div>
+</div>
+
+<!-- ARENA -->
+<div class="arena" id="arena">
+  <div class="arena-top">
+    <div class="arena-actions">
+      <button class="leave-btn" onclick="leaveArenaManual()"><i class="bi bi-box-arrow-right"></i> انسحاب</button>
+      <button class="chat-game-btn" onclick="toggleChatOverlay()"><i class="bi bi-chat-dots-fill"></i> رسالة</button>
+    </div>
+    <div class="arena-hud">
+      <div class="hud-player me">
+        <div class="hud-av" id="hudMeAv">🧙</div>
+        <div class="hud-meta">
+          <div class="hud-nm" id="hudMeNm">أنا</div>
+          <div class="hp-bar"><div class="hp-fill" id="hudMeHp" style="width:100%"></div><span class="hp-txt" id="hudMeHpTxt">1000</span></div>
+        </div>
+      </div>
+      <div class="match-timer" id="matchTimer">05:00</div>
+      <div class="hud-player enemy">
+        <div class="hud-av" id="hudEnAv">🐉</div>
+        <div class="hud-meta">
+          <div class="hud-nm" id="hudEnNm">العدو</div>
+          <div class="hp-bar"><div class="hp-fill enemy" id="hudEnHp" style="width:100%"></div><span class="hp-txt" id="hudEnHpTxt">1000</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="arena-field" id="arenaField">
+    <div class="arena-bg" id="arenaBg"></div>
+    <div class="arena-overlay"></div>
+    <div class="fighter me" id="fighterMe"><div class="fig-body" id="figMeBody"></div><div class="fig-hp"><div class="fig-hp-fill" id="figMeHp" style="width:100%"></div></div></div>
+    <div class="fighter enemy" id="fighterEn"><div class="fig-body" id="figEnBody"></div><div class="fig-hp"><div class="fig-hp-fill" id="figEnHp" style="width:100%"></div></div></div>
+    <div class="chat-overlay" id="chatOverlay">
+      <input type="text" class="chat-input" id="chatInputInline" placeholder="اكتب رسالتك..." maxlength="80">
+      <button class="chat-send-btn" onclick="sendChatInline()"><i class="bi bi-send-fill"></i></button>
+    </div>
+  </div>
+
+  <div class="arena-bottom">
+    <div class="arena-info" id="arenaInfo">⚔️ المس الملعب لتحريك شخصيتك</div>
+    <button class="attack-btn" id="btnAttack" onpointerdown="startAttack()"><i class="bi bi-crosshair"></i> هجوم</button>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal" id="tournHistoryModal">
+  <div class="mc">
+    <div class="mh"><div class="mt"><i class="bi bi-clock-history"></i> سجل البطولات</div><button class="mx" onclick="closeModal('tournHistoryModal')"><i class="bi bi-x-lg"></i></button></div>
+    <div id="tournHistoryContent"></div>
+  </div>
+</div>
+
+<div class="modal" id="tournHistoryDetailModal">
+  <div class="mc">
+    <div class="mh"><div class="mt"><i class="bi bi-trophy-fill"></i> تفاصيل البطولة</div><button class="mx" onclick="closeModal('tournHistoryDetailModal')"><i class="bi bi-x-lg"></i></button></div>
+    <div id="tournHistoryDetailContent"></div>
+  </div>
+</div>
+
+<div class="modal" id="tournAdminModal">
+  <div class="mc">
+    <div class="mh"><div class="mt"><i class="bi bi-shield-fill-check"></i> إدارة البطولة</div><button class="mx" onclick="closeModal('tournAdminModal')"><i class="bi bi-x-lg"></i></button></div>
+    <div class="admin-tabs-tourn">
+      <div class="at on" data-ttab="pending" onclick="setTournAdminTab('pending')">⏳ الطلبات <span id="tournPendingCount"></span></div>
+      <div class="at" data-ttab="joined" onclick="setTournAdminTab('joined')">✅ المنضمون</div>
+    </div>
+    <div id="tournPendingList"></div>
+    <div id="tournJoinedList" style="display:none"></div>
+  </div>
+</div>
+
+<div class="modal" id="createTournModal">
+  <div class="mc">
+    <div class="mh"><div class="mt"><i class="bi bi-plus-circle-fill"></i> بطولة جديدة</div><button class="mx" onclick="closeModal('createTournModal')"><i class="bi bi-x-lg"></i></button></div>
+
+    <div class="sec-title"><i class="bi bi-card-heading"></i> اسم البطولة</div>
+    <input type="text" class="inp" id="ct-name" placeholder="اسم البطولة" maxlength="50">
+
+    <div class="sec-title"><i class="bi bi-image"></i> رابط صورة البطولة</div>
+    <input type="url" class="inp" id="ct-img" placeholder="https://..." oninput="updateCreatePreview()">
+    <div class="preview-img" id="ct-preview">لا توجد صورة</div>
+
+    <div class="sec-title"><i class="bi bi-people-fill"></i> عدد المتسابقين</div>
+    <div class="tourn-size-options">
+      <button class="tourn-size-btn" data-size="2" onclick="setCreateSize(2)">2</button>
+      <button class="tourn-size-btn" data-size="4" onclick="setCreateSize(4)">4</button>
+      <button class="tourn-size-btn" data-size="8" onclick="setCreateSize(8)">8</button>
+      <button class="tourn-size-btn" data-size="16" onclick="setCreateSize(16)">16</button>
+      <button class="tourn-size-btn" data-size="32" onclick="setCreateSize(32)">32</button>
+      <button class="tourn-size-btn on" data-size="64" onclick="setCreateSize(64)">64</button>
+      <button class="tourn-size-btn" data-size="200" onclick="setCreateSize(200)">200</button>
+    </div>
+
+    <div class="sec-title"><i class="bi bi-star-fill"></i> نقاط الفائزين</div>
+    <div class="size-row">
+      <div><div class="size-lbl">🥇 الأول</div><input type="number" class="inp" id="ct-p1" min="0" max="1000000" value="500" style="margin-bottom:0"></div>
+      <div><div class="size-lbl">🥈 الثاني</div><input type="number" class="inp" id="ct-p2" min="0" max="1000000" value="300" style="margin-bottom:0"></div>
+    </div>
+    <div class="size-row">
+      <div><div class="size-lbl">🥉 الثالث</div><input type="number" class="inp" id="ct-p3" min="0" max="1000000" value="200" style="margin-bottom:0"></div>
+      <div><div class="size-lbl">4️⃣ الرابع</div><input type="number" class="inp" id="ct-p4" min="0" max="1000000" value="100" style="margin-bottom:0"></div>
+    </div>
+
+    <div class="sec-title" style="margin-top:10px"><i class="bi bi-file-text"></i> وصف البطولة</div>
+    <textarea class="inp" id="ct-desc" rows="4" placeholder="اكتب وصفاً للبطولة..." style="resize:vertical;font-family:inherit"></textarea>
+
+    <button class="save-btn" onclick="createNewTournament()"><i class="bi bi-check-circle-fill"></i> إنشاء البطولة</button>
+  </div>
+</div>
+
+<div class="modal" id="exploreTournModal">
+  <div class="mc">
+    <div class="mh"><div class="mt"><i class="bi bi-info-circle-fill"></i> استكشاف البطولة</div><button class="mx" onclick="closeModal('exploreTournModal')"><i class="bi bi-x-lg"></i></button></div>
+    <div id="exploreTournContent"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js';
+import { getFirestore, collection, addDoc, getDocs, query, doc, getDoc, onSnapshot, updateDoc, deleteDoc, serverTimestamp, setDoc, increment, orderBy, limit, runTransaction } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCPBrZMo6IYCwCDYV3HEfNcUmLUITR6VRc",
+  authDomain: "elahbes.firebaseapp.com",
+  projectId: "elahbes",
+  storageBucket: "elahbes.firebasestorage.app",
+  messagingSenderId: "800207969145",
+  appId: "1:800207969145:web:aa19b725d1c92dd48fada8"
+};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const KING_EMAIL = 'hd5@5.com';
+const QUEEN_EMAIL = 'dh5@5.com';
+const MATCH_DURATION = 5*60*1000;
+const MAX_HP = 1000;
+const ROUND_DELAY = 4000;
+
+const DEFAULT_CHARACTERS = [
+  { id:'mage',  emoji:'🧙' }, { id:'knight',emoji:'🦸' }, { id:'ninja', emoji:'🥷' },
+  { id:'robot', emoji:'🤖' }, { id:'alien', emoji:'👽' },
+];
+const DEFAULT_WEAPONS = [
+  { id:'laser', emoji:'🔫', power:50, cls:'mine' },
+  { id:'ice',   emoji:'❄️', power:45, cls:'ice' },
+  { id:'fire',  emoji:'🔥', power:55, cls:'fire' },
+  { id:'rocket',emoji:'🚀', power:60, cls:'mine' },
+  { id:'poison',emoji:'☠️', power:40, cls:'mine' },
+  { id:'thunder',emoji:'⚡',power:52, cls:'fire' },
+];
+
+let CHARACTERS = [...DEFAULT_CHARACTERS];
+let WEAPONS = [...DEFAULT_WEAPONS];
+
+let currentUser = null;
+let myProfile = null;
+let globalBgUrl = '';
+let myCharConfig = { charId:'mage', weaponId:'laser', sizeW:70, sizeH:70 };
+
+let tournUnsub = null;
+let roundUnsub = null;
+let tournPlayersMap = new Map();
+let tournPendingMap = new Map();
+let tournState = { status:'idle', champion:null, round:0, startedAt:null, history:[], maxPlayers:64, name:'البطولة', image:'', description:'', prizes:{p1:500,p2:300,p3:200,p4:100} };
+let currentRoundData = null;
+let tournGlobeRotY = 0, tournGlobeRotX = 8;
+let tournDragging = false;
+let tournLastTouch = {x:0,y:0,moved:false};
+let tournRafId = null, tournLastTime = 0, tournLastInteraction = 0;
+
+let createSize = 64;
+
+let battle = null;
+let battleUnsub = null, battleShotUnsub = null, battleChatUnsub = null;
+let battleRafId = null, battleLastTick = 0;
+let matchTimerInterval = null;
+let lastPosSend = 0, pendingPos = false;
+let fieldTouchActive = false;
+let fieldRectCache = null, fieldRectTime = 0;
+const projElMap = new Map();
+
+// ✅ منع التعامل المزدوج مع الجولة
+let processingRound = false;
+let creatingNextRound = false;
+
+const $ = id => document.getElementById(id);
+
+function showToast(ico,msg){
+  const t=$('toast'); if(!t)return;
+  t.innerHTML=`<span>${ico}</span> ${msg}`;
+  t.classList.add('on'); clearTimeout(t._t);
+  t._t=setTimeout(()=>t.classList.remove('on'),2500);
+}
+function showSMsg(txt,type='default',dur=2500){
+  document.querySelectorAll('.smsg').forEach(m=>m.remove());
+  const el=document.createElement('div'); el.className=`smsg ${type}`;
+  const icons={win:'🏆',lose:'💀',default:'⚔️'};
+  el.innerHTML=`<div class="smsg-ico">${icons[type]||'⚔️'}</div><div class="smsg-txt">${txt}</div>`;
+  document.body.appendChild(el);
+  setTimeout(()=>{el.remove()},dur);
+}
+window.closeModal = id => { const m=$(id); if(m)m.classList.remove('on'); };
+window.openModal  = id => { const m=$(id); if(m)m.classList.add('on'); };
+
+function getFieldRect(){
+  const now = performance.now();
+  if(!fieldRectCache || now - fieldRectTime > 500){
+    fieldRectCache = $('arenaField').getBoundingClientRect();
+    fieldRectTime = now;
+  }
+  return fieldRectCache;
+}
+
+function initStars(){
+  const c=$('stars'); if(!c)return;
+  const n=window.innerWidth<500?70:120;
+  const html=[];
+  for(let i=0;i<n;i++){
+    const sz=Math.random()*2+0.5;
+    html.push(`<div class="star" style="width:${sz}px;height:${sz}px;left:${Math.random()*100}vw;top:${Math.random()*100}vh;opacity:${0.2+Math.random()*0.6}"></div>`);
+  }
+  c.innerHTML=html.join('');
+}
+initStars();
+
+let audioCtx=null;
+function initAudio(){ if(!audioCtx){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)()}catch(e){}} if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume(); return audioCtx; }
+function beep(freq,dur=0.08,type='sine',vol=0.13){
+  const ctx=initAudio(); if(!ctx)return;
+  try{ const o=ctx.createOscillator(),g=ctx.createGain();
+  o.type=type;o.frequency.value=freq;o.connect(g);g.connect(ctx.destination);
+  const t=ctx.currentTime; g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(vol,t+0.01);
+  g.gain.exponentialRampToValueAtTime(0.001,t+dur); o.start(t);o.stop(t+dur+0.02);}catch(e){}
+}
+function sfxShoot(){ beep(880,0.08,'square',0.11); }
+function sfxHit(){ beep(180,0.15,'sawtooth',0.18); }
+function sfxWin(){ [523,659,784,1046].forEach((f,i)=>setTimeout(()=>beep(f,0.2,'triangle',0.2),i*120)); }
+function sfxLose(){ [392,349,311,261].forEach((f,i)=>setTimeout(()=>beep(f,0.25,'sawtooth',0.17),i*150)); }
+function sfxMsgRecv(){ beep(880,0.1,'sine',0.2); setTimeout(()=>beep(1174,0.12,'sine',0.22),90); setTimeout(()=>beep(1568,0.2,'sine',0.25),200); }
+
+const activeAudios=new Set();
+function playSound(url){
+  if(!url)return;
+  try{ const a=new Audio(url); a.volume=0.65; activeAudios.add(a); a.play().catch(()=>{});
+    a.onended=()=>activeAudios.delete(a);
+    setTimeout(()=>{try{if(!a.paused)a.pause();}catch(e){} activeAudios.delete(a);},5000);
+  }catch(e){}
+}
+
+function isKingOrQueen(profile){
+  if(!profile) return false;
+  const e = (profile.email || '').toLowerCase().trim();
+  return e === KING_EMAIL || e === QUEEN_EMAIL;
+}
+
+/* ============ TICKER ============ */
+function updateTicker(){
+  const el = $('tickerContent'); if(!el) return;
+  const items = [];
+  items.push({cls:'', txt:`🏆 ${tournState.name || 'البطولة'}`});
+  items.push({cls:'cy', txt:`👥 ${tournPlayersMap.size} / ${tournState.maxPlayers || 64} متسابق`});
+
+  if(tournState.status === 'open') items.push({cls:'gr', txt:'🟢 مفتوحة للاشتراك'});
+  else if(tournState.status === 'running'){
+    items.push({cls:'gr', txt:`⚔️ جارية · الجولة ${tournState.round}`});
+    const active = [...tournPlayersMap.values()].filter(p=>p.status === 'active').length;
+    items.push({cls:'cy', txt:`🎯 ${active} متسابق متبقي`});
+  } else if(tournState.status === 'finished' && tournState.champion){
+    items.push({cls:'', txt:`👑 البطل: ${tournState.champion.name}`});
+  } else {
+    items.push({cls:'pu', txt:'⏳ بانتظار انطلاق البطولة'});
+  }
+
+  // آخر فائزين
+  if(currentRoundData && currentRoundData.matches){
+    const finished = currentRoundData.matches.filter(m=>m.status === 'finished' && m.winner);
+    const recent = finished.slice(-3);
+    recent.forEach(m=>{
+      items.push({cls:'win', txt:`✅ ${m.winner.name} فاز`});
+    });
+    const active = currentRoundData.matches.filter(m=>m.status === 'active');
+    active.forEach(m=>{
+      items.push({cls:'cy', txt:`⚔️ ${m.p1.name} vs ${m.p2.name}`});
+    });
+  }
+
+  el.innerHTML = items.map(it=>`<div class="ticker-item ${it.cls}"><span class="dot"></span> ${it.txt}</div>`).join('');
+  // أعد تشغيل الأنيميشن
+  el.style.animation = 'none';
+  setTimeout(()=>{ el.style.animation = 'tickerScroll 40s linear infinite'; }, 50);
+}
+
+/* ============ AUTH ============ */
+window.handleLogin = async function(){
+  const email=$('email').value.trim(), pass=$('pass').value;
+  const err=$('authErr');
+  if(!email||!pass){ err.textContent='يرجى ملء الحقول'; err.classList.add('on'); return; }
+  const btn=$('loginBtn'); btn.disabled=true; btn.innerHTML='⏳ ...';
+  try{ initAudio(); await signInWithEmailAndPassword(auth,email,pass); }
+  catch(e){
+    let msg='فشل تسجيل الدخول';
+    if(e.code==='auth/user-not-found')msg='لا يوجد حساب';
+    else if(e.code==='auth/wrong-password'||e.code==='auth/invalid-credential')msg='كلمة المرور خاطئة';
+    err.textContent=msg; err.classList.add('on');
+  } finally {
+    btn.disabled=false; btn.innerHTML='<i class="bi bi-box-arrow-in-right"></i> تسجيل الدخول';
+  }
+};
+
+onAuthStateChanged(auth, async user=>{
+  if(user){
+    currentUser=user;
+    $('authScreen').classList.remove('on');
+    $('app').style.display='flex';
+    await loadMyProfile();
+    await loadCustomAssets();
+    await loadGlobalBg();
+    updateUI();
+    loadTournament();
+    listenRound();
+  } else {
+    currentUser=null;
+    $('authScreen').classList.add('on');
+    $('app').style.display='none';
+    if(tournUnsub){ tournUnsub(); tournUnsub=null; }
+    if(roundUnsub){ roundUnsub(); roundUnsub=null; }
+  }
+});
+
+async function loadMyProfile(){
+  try{
+    const d = await getDoc(doc(db,'users',currentUser.uid));
+    const data = d.exists()?d.data():{};
+    myProfile = {
+      name: data.name || currentUser.displayName || currentUser.email?.split('@')[0] || 'مستخدم',
+      avatar: data.avatar || '',
+      email: currentUser.email || ''
+    };
+    const cd = await getDoc(doc(db,'timeGatesProfiles',currentUser.uid));
+    if(cd.exists()){
+      const c = cd.data();
+      myCharConfig = { charId:c.charId||'mage', weaponId:c.weaponId||'laser', sizeW:c.sizeW||70, sizeH:c.sizeH||70 };
+    }
+  }catch(e){ console.error(e); }
+}
+
+async function loadCustomAssets(){
+  try{
+    const snap = await getDocs(collection(db,'timeGatesCustomChars'));
+    const chars = [], weapons = [];
+    snap.forEach(d=>{
+      const v = d.data();
+      if(v.type==='char') chars.push({ id:d.id, ...v });
+      else if(v.type==='weapon') weapons.push({ id:d.id, ...v });
+    });
+    CHARACTERS = [...DEFAULT_CHARACTERS, ...chars];
+    WEAPONS = [...DEFAULT_WEAPONS, ...weapons];
+  }catch(e){
+    CHARACTERS = [...DEFAULT_CHARACTERS];
+    WEAPONS = [...DEFAULT_WEAPONS];
+  }
+}
+
+async function loadGlobalBg(){
+  try{ const d = await getDoc(doc(db,'timeGatesConfig','bg')); if(d.exists() && d.data().url) globalBgUrl = d.data().url; }catch(e){}
+}
+
+function updateUI(){
+  const c = CHARACTERS.find(x=>x.id===myCharConfig.charId) || CHARACTERS[0];
+  if(c.img) $('hdrAvatar').innerHTML = `<img src="${c.img}" onerror="this.outerHTML='${c.emoji||'🧙'}'">`;
+  else $('hdrAvatar').textContent = c.emoji || '🧙';
+  $('hdrName').textContent = myProfile?.name || 'مستخدم';
+  $('adminBtn').style.display = isKingOrQueen(myProfile) ? 'flex' : 'none';
+}
+
+/* ============ TOURNAMENT ============ */
+function loadTournament(){
+  if(tournUnsub) tournUnsub();
+  tournUnsub = onSnapshot(doc(db,'timeGatesTournament','current'), async snap=>{
+    if(snap.exists()){
+      const data = snap.data();
+      tournState.status = data.status || 'open';
+      tournState.champion = data.champion || null;
+      tournState.round = data.round || 0;
+      tournState.startedAt = data.startedAt || null;
+      tournState.maxPlayers = data.maxPlayers || 64;
+      tournState.name = data.name || 'البطولة';
+      tournState.image = data.image || '';
+      tournState.description = data.description || '';
+      tournState.prizes = data.prizes || {p1:500,p2:300,p3:200,p4:100};
+      tournPlayersMap.clear();
+      if(data.players && Array.isArray(data.players)) data.players.forEach(p=>tournPlayersMap.set(p.uid, p));
+      tournPendingMap.clear();
+      if(data.pending && Array.isArray(data.pending)) data.pending.forEach(p=>tournPendingMap.set(p.uid, p));
+    } else {
+      tournState = { status:'idle', champion:null, round:0, startedAt:null, history: tournState.history||[], maxPlayers:64, name:'البطولة', image:'', description:'', prizes:{p1:500,p2:300,p3:200,p4:100} };
+      tournPlayersMap.clear();
+      tournPendingMap.clear();
+    }
+    try{
+      const hSnap = await getDoc(doc(db,'timeGatesTournament','history'));
+      if(hSnap.exists()) tournState.history = hSnap.data().history || [];
+    }catch(e){}
+    renderTournamentUI();
+    updateTicker();
+  });
+}
+
+function listenRound(){
+  if(roundUnsub) roundUnsub();
+  roundUnsub = onSnapshot(doc(db,'timeGatesTournament','currentRound'), snap=>{
+    if(!snap.exists()){
+      currentRoundData = null;
+      updateRoundDisplay();
+      updateGlobeMatchStatus();
+      updateTicker();
+      return;
+    }
+    currentRoundData = snap.data();
+    updateRoundDisplay();
+    updateGlobeMatchStatus();
+    updateTicker();
+
+    // ✅ فحص تلقائي: هل هناك مباراة نشطة لي؟
+    if(!currentUser || !currentRoundData || battle) return;
+    const myMatch = (currentRoundData.matches || []).find(m =>
+      m.status === 'active' && (m.p1?.uid === currentUser.uid || m.p2?.uid === currentUser.uid)
+    );
+    if(myMatch){
+      if(!battle){
+        showToast('🏆','مباراتك بدأت! جارٍ الدخول...');
+        setTimeout(()=>{ if(!battle && currentRoundData) startTournBattle(myMatch, currentRoundData); }, 800);
+      }
+    }
+  });
+}
+
+function updateRoundDisplay(){
+  // تحديث الشريط المصغر
+  $('hdrTitle').textContent = tournState.name || 'البطولة';
+  $('hdrCount').textContent = `${tournPlayersMap.size}/${tournState.maxPlayers || 64}`;
+
+  let statusText = 'مفتوحة';
+  if(tournState.status === 'running') statusText = `جارية (${tournState.round})`;
+  else if(tournState.status === 'finished') statusText = 'منتهية';
+  else if(tournPlayersMap.size >= (tournState.maxPlayers||64)) statusText = 'جاهزة';
+  $('hdrStatus').textContent = statusText;
+
+  if(currentRoundData && tournState.status === 'running'){
+    const matches = currentRoundData.matches || [];
+    const finished = matches.filter(m=>m.status === 'finished').length;
+    $('hdrRound').textContent = `${finished}/${matches.length}`;
+  } else {
+    $('hdrRound').textContent = '-';
+  }
+}
+
+function updateGlobeMatchStatus(){
+  const globe = $('tournGlobe');
+  if(!globe) return;
+  if(!currentRoundData || !currentRoundData.matches){ 
+    globe.querySelectorAll('.t-player').forEach(el=>el.classList.remove('in-match'));
+    return;
+  }
+  const activeUids = new Set();
+  currentRoundData.matches.forEach(m=>{
+    if(m.status === 'active'){
+      activeUids.add(m.p1.uid);
+      activeUids.add(m.p2.uid);
+    }
+  });
+  globe.querySelectorAll('.t-player').forEach(el=>{
+    el.classList.toggle('in-match', activeUids.has(el.dataset.uid));
+  });
+}
+
+function renderTournamentUI(){
+  renderTournGlobe();
+  renderTournActions();
+  renderTournPendingList();
+  renderTournJoinedList();
+  updateRoundDisplay();
+  updateTicker();
+}
+
+function renderTournGlobe(){
+  const globe = $('tournGlobe'); if(!globe) return;
+  const players = [...tournPlayersMap.values()].filter(p=>p.status !== 'eliminated');
+  const count = players.length;
+  if(count === 0){ globe.innerHTML=''; return; }
+  const wrap = $('tournGlobeWrap');
+  const wrapSize = wrap ? wrap.getBoundingClientRect().width : 400;
+  const R = wrapSize * 0.38;
+  let avSize = 42;
+  if(count > 150) avSize = 18; else if(count > 100) avSize = 22; else if(count > 64) avSize = 26; else if(count > 32) avSize = 32; else if(count > 16) avSize = 36;
+
+  globe.innerHTML = players.map((p,i)=>{
+    const phi = Math.acos(1 - 2*(i+0.5)/Math.max(count,1));
+    const theta = Math.PI*(1+Math.sqrt(5))*(i+0.5);
+    const x = R*Math.sin(phi)*Math.cos(theta);
+    const y = R*Math.cos(phi);
+    const z = R*Math.sin(phi)*Math.sin(theta);
+    const isChamp = tournState.champion && tournState.champion.uid === p.uid;
+    const av = p.avatar ? `<img src="${p.avatar}">` : (p.name||'?').charAt(0);
+    const totalSize = avSize + 10;
+    return `<div class="t-player ${isChamp?'champion':''}" data-uid="${p.uid}"
+      style="transform:translate3d(${x}px,${y}px,${z}px);width:${totalSize}px;height:${totalSize}px;margin:-${totalSize/2}px 0 0 -${totalSize/2}px">
+      <div class="t-player-av" style="width:${avSize}px;height:${avSize}px;font-size:${Math.round(avSize*0.45)}px">${av}</div>
+      <div class="t-player-nm">${p.name||''}</div>
+    </div>`;
+  }).join('');
+  applyTournRotation();
+  updateGlobeMatchStatus();
+}
+
+function applyTournRotation(){
+  const g = $('tournGlobe'); if(!g) return;
+  g.style.transform = `rotateX(${tournGlobeRotX}deg) rotateY(${tournGlobeRotY}deg)`;
+}
+
+function autoTournRotate(now){
+  tournRafId = requestAnimationFrame(autoTournRotate);
+  if(tournDragging || Date.now() - tournLastInteraction < 1500) return;
+  if(now - tournLastTime < 33) return;
+  tournLastTime = now;
+  tournGlobeRotY += 0.15;
+  applyTournRotation();
+}
+tournRafId = requestAnimationFrame(autoTournRotate);
+
+const tournWrap = $('tournGlobeWrap');
+if(tournWrap){
+  tournWrap.addEventListener('pointerdown', e=>{
+    tournDragging = true;
+    tournLastInteraction = Date.now();
+    tournLastTouch = {x:e.clientX, y:e.clientY, moved:false};
+    try{tournWrap.setPointerCapture(e.pointerId);}catch(err){}
+  });
+  tournWrap.addEventListener('pointermove', e=>{
+    if(!tournDragging) return;
+    const dx = e.clientX - tournLastTouch.x;
+    const dy = e.clientY - tournLastTouch.y;
+    if(Math.abs(dx)>3 || Math.abs(dy)>3) tournLastTouch.moved = true;
+    tournGlobeRotY += dx*0.4;
+    tournGlobeRotX = Math.max(-60, Math.min(60, tournGlobeRotX - dy*0.3));
+    tournLastTouch.x = e.clientX;
+    tournLastTouch.y = e.clientY;
+    tournLastInteraction = Date.now();
+    applyTournRotation();
+    e.preventDefault();
+  });
+  const up = ()=>{ tournLastInteraction = Date.now(); setTimeout(()=>{tournDragging=false;},50); };
+  tournWrap.addEventListener('pointerup', up);
+  tournWrap.addEventListener('pointercancel', up);
+}
+
+function renderTournActions(){
+  const actions = $('tournActions'); if(!actions) return;
+  const myUid = currentUser?.uid;
+  const isAdmin = isKingOrQueen(myProfile);
+  const iAmIn = myUid && tournPlayersMap.has(myUid);
+  const iAmPending = myUid && tournPendingMap.has(myUid);
+  const maxPlayers = tournState.maxPlayers || 64;
+  let html = '';
+  if(tournState.status === 'idle' || tournState.status === 'open'){
+    if(iAmIn){
+      html += `<button class="tourn-btn leave" onclick="leaveTournament()"><i class="bi bi-box-arrow-right"></i> انسحاب</button>`;
+    } else if(iAmPending){
+      html += `<button class="tourn-btn pending"><i class="bi bi-hourglass-split"></i> بانتظار الموافقة</button>`;
+    } else if(tournPlayersMap.size < maxPlayers){
+      html += `<button class="tourn-btn join" onclick="joinTournament()"><i class="bi bi-plus-circle-fill"></i> اشتراك</button>`;
+    } else {
+      html += `<button class="tourn-btn pending"><i class="bi bi-x-circle"></i> ممتلئة</button>`;
+    }
+  }
+  if(isAdmin){
+    if(tournState.status === 'open' && tournPlayersMap.size >= 2){
+      html += `<button class="tourn-btn start" onclick="startTournament()"><i class="bi bi-play-fill"></i> انطلاق</button>`;
+    }
+    if(tournPendingMap.size > 0){
+      html += `<button class="tourn-btn start" onclick="openTournAdmin()"><i class="bi bi-person-check-fill"></i> إدارة (${tournPendingMap.size})</button>`;
+    }
+    if(tournState.status === 'running' || tournState.status === 'open'){
+      html += `<button class="tourn-btn cancel" onclick="cancelTournament()"><i class="bi bi-x-octagon-fill"></i> إلغاء</button>`;
+    }
+    if(tournState.status === 'idle' || tournState.status === 'finished'){
+      html += `<button class="tourn-btn start" onclick="openCreateTourn()"><i class="bi bi-plus-circle-fill"></i> بطولة جديدة</button>`;
+    }
+  }
+  if(tournState.status !== 'idle'){
+    html += `<button class="tourn-btn explore" onclick="exploreTournament()"><i class="bi bi-info-circle-fill"></i> استكشاف</button>`;
+  }
+  html += `<button class="tourn-btn history" onclick="openTournHistory()"><i class="bi bi-clock-history"></i> السجل</button>`;
+  actions.innerHTML = html;
+}
+
+window.joinTournament = async function(){
+  if(!currentUser) return;
+  if(tournPlayersMap.has(currentUser.uid)){ showToast('⚠️','أنت منضم مسبقاً'); return; }
+  if(tournPendingMap.has(currentUser.uid)){ showToast('⚠️','طلبك قيد الانتظار'); return; }
+  const maxPlayers = tournState.maxPlayers || 64;
+  if(tournPlayersMap.size >= maxPlayers){ showToast('⚠️','البطولة ممتلئة'); return; }
+  try{
+    const playerData = { uid:currentUser.uid, name:myProfile.name, avatar:myProfile.avatar||'', status:'active', wins:0, joinedAt: Date.now() };
+    const curSnap = await getDoc(doc(db,'timeGatesTournament','current'));
+    let data = curSnap.exists() ? curSnap.data() : { status:'open', players:[], pending:[], maxPlayers:64 };
+    if(!data.status || data.status === 'idle' || data.status === 'finished'){
+      data = { status:'open', players:[], pending:[], maxPlayers: data.maxPlayers || 64 };
+    }
+    const pending = data.pending || [];
+    pending.push(playerData);
+    await setDoc(doc(db,'timeGatesTournament','current'), { ...data, status:'open', pending, players: data.players || [], maxPlayers: data.maxPlayers || 64 }, {merge:true});
+    showToast('✅','تم إرسال طلب الانضمام');
+  }catch(e){ console.error(e); showToast('❌','فشل'); }
+};
+
+window.leaveTournament = async function(){
+  if(!currentUser) return;
+  if(!confirm('الانسحاب من البطولة؟')) return;
+  try{
+    const curSnap = await getDoc(doc(db,'timeGatesTournament','current'));
+    if(!curSnap.exists()) return;
+    const data = curSnap.data();
+    const players = (data.players || []).filter(p=>p.uid !== currentUser.uid);
+    await setDoc(doc(db,'timeGatesTournament','current'), { players }, {merge:true});
+    showToast('✅','تم الانسحاب');
+  }catch(e){ showToast('❌','فشل'); }
+};
+
+window.openTournAdmin = function(){
+  if(!isKingOrQueen(myProfile)){ showToast('🔒','للملك/الملكة فقط'); return; }
+  openModal('tournAdminModal');
+  renderTournPendingList();
+  renderTournJoinedList();
+};
+
+window.setTournAdminTab = function(t){
+  document.querySelectorAll('.admin-tabs-tourn .at').forEach(x=>x.classList.toggle('on', x.dataset.ttab === t));
+  $('tournPendingList').style.display = t === 'pending' ? 'block' : 'none';
+  $('tournJoinedList').style.display = t === 'joined' ? 'block' : 'none';
+};
+
+function renderTournPendingList(){
+  const el = $('tournPendingList'); if(!el) return;
+  const cnt = tournPendingMap.size;
+  $('tournPendingCount').textContent = cnt > 0 ? `(${cnt})` : '';
+  if(cnt === 0){ el.innerHTML = '<div class="empty"><i class="bi bi-inbox"></i>لا توجد طلبات</div>'; return; }
+  el.innerHTML = [...tournPendingMap.values()].map(p=>{
+    const av = p.avatar ? `<img src="${p.avatar}">` : (p.name||'?').charAt(0);
+    return `<div class="pending-item">
+      <div class="pav">${av}</div>
+      <div class="pinfo"><div class="pnm">${p.name||''}</div></div>
+      <div class="pbtns">
+        <button class="acc" onclick="approveTournPlayer('${p.uid}')"><i class="bi bi-check-lg"></i></button>
+        <button class="rej" onclick="rejectTournPlayer('${p.uid}')"><i class="bi bi-x-lg"></i></button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderTournJoinedList(){
+  const el = $('tournJoinedList'); if(!el) return;
+  const players = [...tournPlayersMap.values()].sort((a,b)=>(b.wins||0)-(a.wins||0));
+  if(!players.length){ el.innerHTML = '<div class="empty"><i class="bi bi-people"></i>لا يوجد منضمون</div>'; return; }
+  el.innerHTML = players.map(p=>{
+    const av = p.avatar ? `<img src="${p.avatar}">` : (p.name||'?').charAt(0);
+    const isElim = p.status === 'eliminated';
+    const isChamp = tournState.champion && tournState.champion.uid === p.uid;
+    let badge = '<span class="tp-badge active">نشط</span>';
+    if(isChamp) badge = '<span class="tp-badge champion">👑 بطل</span>';
+    else if(isElim) badge = '<span class="tp-badge out">خارج</span>';
+    return `<div class="tourn-player-row ${isElim?'eliminated':''}">
+      <div class="tp-av">${av}</div>
+      <div class="tp-info"><div class="tp-nm">${p.name||''}</div><div class="tp-stat">🏆 ${p.wins||0} فوز</div></div>
+      ${badge}
+    </div>`;
+  }).join('');
+}
+
+window.approveTournPlayer = async function(uid){
+  if(!isKingOrQueen(myProfile)) return;
+  const maxPlayers = tournState.maxPlayers || 64;
+  if(tournPlayersMap.size >= maxPlayers){ showToast('⚠️','البطولة ممتلئة'); return; }
+  const player = tournPendingMap.get(uid);
+  if(!player) return;
+  try{
+    const curSnap = await getDoc(doc(db,'timeGatesTournament','current'));
+    if(!curSnap.exists()) return;
+    const data = curSnap.data();
+    const players = data.players || [];
+    const pending = (data.pending || []).filter(p=>p.uid !== uid);
+    players.push({...player, status:'active', wins:0});
+    await setDoc(doc(db,'timeGatesTournament','current'), { players, pending, maxPlayers: data.maxPlayers || 64 }, {merge:true});
+    showToast('✅',`تم قبول ${player.name}`);
+  }catch(e){ showToast('❌','فشل'); }
+};
+
+window.rejectTournPlayer = async function(uid){
+  if(!isKingOrQueen(myProfile)) return;
+  try{
+    const curSnap = await getDoc(doc(db,'timeGatesTournament','current'));
+    if(!curSnap.exists()) return;
+    const data = curSnap.data();
+    const pending = (data.pending || []).filter(p=>p.uid !== uid);
+    await setDoc(doc(db,'timeGatesTournament','current'), { pending }, {merge:true});
+    showToast('✅','تم الرفض');
+  }catch(e){ showToast('❌','فشل'); }
+};
+
+window.startTournament = async function(){
+  if(!isKingOrQueen(myProfile)) return;
+  if(tournPlayersMap.size < 2){ showToast('⚠️','تحتاج متسابقين على الأقل'); return; }
+  if(!confirm(`بدء البطولة بـ ${tournPlayersMap.size} متسابق؟`)) return;
+  try{
+    const curSnap = await getDoc(doc(db,'timeGatesTournament','current'));
+    if(!curSnap.exists()) return;
+    const data = curSnap.data();
+    const players = (data.players || []).map(p=>({...p, status:'active', wins:0}));
+    await setDoc(doc(db,'timeGatesTournament','current'), {
+      status:'running', round:0, startedAt: Date.now(), players, pending:[], champion:null
+    }, {merge:true});
+    await generateNextRound();
+    showToast('🚀','انطلقت البطولة');
+  }catch(e){ showToast('❌','فشل'); }
+};
+
+window.cancelTournament = async function(){
+  if(!isKingOrQueen(myProfile)){ showToast('🔒','للملك/الملكة فقط'); return; }
+  if(!confirm('⚠️ إلغاء البطولة الحالية؟')) return;
+  try{
+    try{ await deleteDoc(doc(db,'timeGatesTournament','currentRound')); }catch(e){}
+    await deleteDoc(doc(db,'timeGatesTournament','current'));
+    tournPlayersMap.clear();
+    tournPendingMap.clear();
+    currentRoundData = null;
+    tournState = { status:'idle', champion:null, round:0, startedAt:null, history: tournState.history || [], maxPlayers:64, name:'البطولة', image:'', description:'', prizes:{p1:500,p2:300,p3:200,p4:100} };
+    if(battle && battle.mode === 'tournament'){
+      battle.running = false;
+      if(battleRafId){ cancelAnimationFrame(battleRafId); battleRafId = null; }
+      if(battleUnsub){ battleUnsub(); battleUnsub = null; }
+      if(battleShotUnsub){ battleShotUnsub(); battleShotUnsub = null; }
+      if(battleChatUnsub){ battleChatUnsub(); battleChatUnsub = null; }
+      projElMap.forEach(el=>el.remove()); projElMap.clear();
+      battle = null;
+      $('arena').classList.remove('on');
+      document.querySelectorAll('.hit-fx,.arena-msg').forEach(e=>e.remove());
+    }
+    renderTournamentUI();
+    showToast('✅','تم إلغاء البطولة');
+  }catch(e){ console.error(e); showToast('❌','فشل'); }
+};
+
+/* ============ Create Tournament ============ */
+window.openCreateTourn = function(){
+  if(!isKingOrQueen(myProfile)){ showToast('🔒','للملك/الملكة فقط'); return; }
+  if(tournState.status === 'running' || tournState.status === 'open'){
+    showToast('⚠️','يوجد بطولة نشطة');
+    return;
+  }
+  $('ct-name').value = '';
+  $('ct-img').value = '';
+  $('ct-preview').style.backgroundImage = '';
+  $('ct-preview').textContent = 'لا توجد صورة';
+  $('ct-p1').value = 500; $('ct-p2').value = 300; $('ct-p3').value = 200; $('ct-p4').value = 100;
+  $('ct-desc').value = '';
+  createSize = 64;
+  document.querySelectorAll('#createTournModal .tourn-size-btn').forEach(b=>{
+    b.classList.toggle('on', parseInt(b.dataset.size) === createSize);
+  });
+  openModal('createTournModal');
+};
+
+window.updateCreatePreview = function(){
+  const url = $('ct-img').value.trim();
+  const prev = $('ct-preview');
+  if(url){ prev.style.backgroundImage = `url('${url}')`; prev.textContent = ''; }
+  else { prev.style.backgroundImage = ''; prev.textContent = 'لا توجد صورة'; }
+};
+
+window.setCreateSize = function(size){
+  createSize = size;
+  document.querySelectorAll('#createTournModal .tourn-size-btn').forEach(b=>{
+    b.classList.toggle('on', parseInt(b.dataset.size) === size);
+  });
+};
+
+window.createNewTournament = async function(){
+  if(!isKingOrQueen(myProfile)){ showToast('🔒','للملك/الملكة فقط'); return; }
+  const name = $('ct-name').value.trim();
+  const image = $('ct-img').value.trim();
+  const description = $('ct-desc').value.trim();
+  const p1 = parseInt($('ct-p1').value) || 0;
+  const p2 = parseInt($('ct-p2').value) || 0;
+  const p3 = parseInt($('ct-p3').value) || 0;
+  const p4 = parseInt($('ct-p4').value) || 0;
+  if(!name){ showToast('⚠️','أدخل اسم البطولة'); return; }
+  try{
+    try{ await deleteDoc(doc(db,'timeGatesTournament','currentRound')); }catch(e){}
+    try{ await deleteDoc(doc(db,'timeGatesTournament','current')); }catch(e){}
+    await setDoc(doc(db,'timeGatesTournament','current'), {
+      status: 'open', name, image, description,
+      maxPlayers: createSize,
+      prizes: { p1, p2, p3, p4 },
+      players: [], pending: [], champion: null, round: 0, startedAt: null,
+      createdAt: serverTimestamp(), createdBy: myProfile.name
+    });
+    tournPlayersMap.clear();
+    tournPendingMap.clear();
+    tournState.status = 'open';
+    tournState.name = name;
+    tournState.image = image;
+    tournState.description = description;
+    tournState.maxPlayers = createSize;
+    tournState.prizes = { p1, p2, p3, p4 };
+    tournState.champion = null;
+    tournState.round = 0;
+    closeModal('createTournModal');
+    renderTournamentUI();
+    showToast('🏆','تم إنشاء البطولة!');
+  }catch(e){ console.error(e); showToast('❌','فشل'); }
+};
+
+/* ============ Explore ============ */
+window.exploreTournament = function(){
+  const el = $('exploreTournContent');
+  const s = tournState;
+  let imgHtml = '';
+  if(s.image) imgHtml = `style="background-image:url('${s.image}')"`;
+  const prizes = s.prizes || {p1:500,p2:300,p3:200,p4:100};
+  el.innerHTML = `
+    <div class="detail-hero" ${imgHtml}>
+      <div class="detail-hero-title">
+        <h3>${s.name || 'البطولة'}</h3>
+        <p>👥 ${tournPlayersMap.size} / ${s.maxPlayers || 64} متسابق</p>
+      </div>
+    </div>
+    ${s.description ? `<div class="detail-desc">${s.description.replace(/\n/g,'<br>')}</div>` : ''}
+    <div class="sec-title" style="margin-bottom:8px"><i class="bi bi-star-fill"></i> جوائز الفائزين</div>
+    <div class="rank-row p1"><div class="rank-pos">🥇</div><div class="rank-info"><div class="rank-nm">المركز الأول</div></div><div class="rank-badge">+${prizes.p1}</div></div>
+    <div class="rank-row p2"><div class="rank-pos">🥈</div><div class="rank-info"><div class="rank-nm">المركز الثاني</div></div><div class="rank-badge">+${prizes.p2}</div></div>
+    <div class="rank-row p3"><div class="rank-pos">🥉</div><div class="rank-info"><div class="rank-nm">المركز الثالث</div></div><div class="rank-badge">+${prizes.p3}</div></div>
+    <div class="rank-row p4"><div class="rank-pos">4️⃣</div><div class="rank-info"><div class="rank-nm">المركز الرابع</div></div><div class="rank-badge">+${prizes.p4}</div></div>
+  `;
+  openModal('exploreTournModal');
+};
+
+/* ============ History ============ */
+window.openTournHistory = function(){
+  openModal('tournHistoryModal');
+  renderTournHistory();
+};
+
+function renderTournHistory(){
+  const el = $('tournHistoryContent');
+  const history = tournState.history || [];
+  if(!history.length){
+    el.innerHTML = '<div class="empty"><i class="bi bi-clock-history"></i>لا توجد بطولات سابقة</div>';
+    return;
+  }
+  el.innerHTML = history.slice().reverse().map((h,i)=>{
+    const idx = history.length - 1 - i;
+    const date = new Date(h.endedAt || h.startedAt || Date.now()).toLocaleDateString('ar-SA');
+    const champ = (h.rankings || []).find(r=>r.rank === 1) || null;
+    const imgHtml = h.image ? `style="background-image:url('${h.image}')"` : '';
+    const avatarFallback = h.image ? '' : '<i class="bi bi-trophy-fill" style="color:var(--gold);opacity:.5"></i>';
+    return `<div class="hist-card" onclick="openHistoryDetail(${idx})">
+      <div class="hist-card-img" ${imgHtml}>${avatarFallback}</div>
+      <div class="hist-card-title">${h.name || ('بطولة رقم ' + (idx+1))}</div>
+      <div class="hist-card-meta">
+        <span><i class="bi bi-calendar-event"></i> ${date}</span>
+        <span><i class="bi bi-people-fill"></i> ${h.rankings?.length || 0}</span>
+      </div>
+      ${champ ? `<div class="hist-card-champ">👑 ${champ.name}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+window.openHistoryDetail = function(idx){
+  const history = tournState.history || [];
+  const h = history[idx];
+  if(!h) return;
+  const el = $('tournHistoryDetailContent');
+  const imgHtml = h.image ? `style="background-image:url('${h.image}')"` : '';
+  const date = new Date(h.endedAt || h.startedAt || Date.now()).toLocaleDateString('ar-SA');
+  const rankings = h.rankings || [];
+  const prizes = h.prizes || {p1:0,p2:0,p3:0,p4:0};
+  const medals = ['👑','🥈','🥉','4️⃣'];
+
+  let rankingsHtml = rankings.slice(0,4).map((r, i)=>{
+    const av = r.avatar ? `<img src="${r.avatar}">` : (r.name||'?').charAt(0);
+    const pClass = `p${i+1}`;
+    const prize = i===0?prizes.p1:i===1?prizes.p2:i===2?prizes.p3:prizes.p4;
+    return `<div class="rank-row ${pClass}">
+      <div class="rank-pos">${medals[i]}</div>
+      <div class="rank-av">${av}</div>
+      <div class="rank-info">
+        <div class="rank-nm">${r.name||''}</div>
+        <div class="rank-stats"><span class="w">✅ ${r.wins||0}</span><span class="p">⭐ +${prize}</span></div>
+      </div>
+      <div class="rank-badge">${i===0?'البطل':i===1?'الوصيف':i===2?'الثالث':'الرابع'}</div>
+    </div>`;
+  }).join('');
+
+  let othersHtml = '';
+  if(rankings.length > 4){
+    othersHtml = `<div class="sec-title" style="margin-top:12px;margin-bottom:6px"><i class="bi bi-people-fill"></i> باقي المشاركين</div>`;
+    othersHtml += rankings.slice(4).map((r, i)=>{
+      const av = r.avatar ? `<img src="${r.avatar}">` : (r.name||'?').charAt(0);
+      return `<div class="rank-row" style="opacity:.7">
+        <div class="rank-pos" style="font-size:13px;color:var(--t3)">${i+5}</div>
+        <div class="rank-av" style="width:32px;height:32px;font-size:14px;border-color:var(--border2);color:var(--t3)">${av}</div>
+        <div class="rank-info"><div class="rank-nm" style="font-size:11px">${r.name||''}</div>
+        <div class="rank-stats"><span class="w">✅ ${r.wins||0}</span></div></div>
+      </div>`;
+    }).join('');
+  }
+
+  el.innerHTML = `
+    <div class="detail-hero" ${imgHtml}>
+      <div class="detail-hero-title">
+        <h3>${h.name || 'بطولة'}</h3>
+        <p>📅 ${date} · 👥 ${rankings.length}</p>
+      </div>
+    </div>
+    ${h.description ? `<div class="detail-desc">${h.description.replace(/\n/g,'<br>')}</div>` : ''}
+    <div class="sec-title" style="margin-bottom:8px"><i class="bi bi-trophy-fill"></i> الفائزون</div>
+    ${rankingsHtml}
+    ${othersHtml}
+    <button style="width:100%;padding:10px;background:rgba(255,59,92,.15);border:1.5px solid rgba(255,59,92,.4);color:#ff8ba3;border-radius:10px;font-weight:900;font-size:11px;cursor:pointer;margin-top:12px" onclick="deleteHistoryEntry(${idx})">
+      <i class="bi bi-trash"></i> حذف البطولة من السجل
+    </button>
+  `;
+  openModal('tournHistoryDetailModal');
+};
+
+window.deleteHistoryEntry = async function(idx){
+  if(!isKingOrQueen(myProfile)){ showToast('🔒','للملك/الملكة فقط'); return; }
+  if(!confirm('⚠️ حذف البطولة من السجل نهائياً؟')) return;
+  try{
+    const histSnap = await getDoc(doc(db,'timeGatesTournament','history'));
+    if(!histSnap.exists()) return;
+    const history = histSnap.data().history || [];
+    history.splice(idx, 1);
+    await setDoc(doc(db,'timeGatesTournament','history'), { history });
+    tournState.history = history;
+    closeModal('tournHistoryDetailModal');
+    renderTournHistory();
+    showToast('✅','تم الحذف');
+  }catch(e){ console.error(e); showToast('❌','فشل'); }
+};
+
+/* ============ ROUNDS - النظام الذري ============ */
+async function fetchPlayerFullData(uid, baseInfo){
+  let profData = {};
+  try{ const snap = await getDoc(doc(db,'timeGatesProfiles', uid)); if(snap.exists()) profData = snap.data(); }catch(e){}
+  const char = CHARACTERS.find(c=>c.id===profData.charId) || CHARACTERS[0];
+  const wpn = WEAPONS.find(w=>w.id===profData.weaponId) || WEAPONS[0];
+  return {
+    uid, name: baseInfo.name || profData.name || 'لاعب',
+    avatar: baseInfo.avatar || '',
+    charId: profData.charId || 'mage',
+    weaponId: profData.weaponId || 'laser',
+    power: wpn.power,
+    charImg: char.img || '', charEmoji: char.emoji || '',
+    weaponImg: wpn.img || '', weaponEmoji: wpn.emoji || '',
+    weaponCls: wpn.cls || 'mine', weaponSound: wpn.sound || '',
+    sizeW: profData.sizeW || 70, sizeH: profData.sizeH || 70,
+    x: 0.25, y: 0.6, hp: MAX_HP
+  };
+}
+
+async function generateNextRound(){
+  if(creatingNextRound) return;
+  creatingNextRound = true;
+  try{
+    const curSnap = await getDoc(doc(db,'timeGatesTournament','current'));
+    if(!curSnap.exists()){ creatingNextRound = false; return; }
+    const data = curSnap.data();
+
+    // ✅ اجلب اللاعبين النشطين
+    const active = (data.players || []).filter(p=>p.status === 'active');
+
+    // ✅ إذا متبقي 1 أو 0، أنهِ البطولة
+    if(active.length <= 1){
+      await finishTournament(active[0] || null, data.players || []);
+      creatingNextRound = false;
+      return;
+    }
+
+    // ✅ خلط عشوائي
+    const shuffled = [...active].sort(()=>Math.random() - 0.5);
+
+    // ✅ تكوين المباريات
+    const matches = [];
+    let byePlayer = null;
+    for(let i = 0; i < shuffled.length; i += 2){
+      if(i + 1 >= shuffled.length){
+        byePlayer = shuffled[i];
+        break;
+      }
+      const p1Base = shuffled[i];
+      const p2Base = shuffled[i + 1];
+      const p1Data = await fetchPlayerFullData(p1Base.uid, p1Base);
+      const p2Data = await fetchPlayerFullData(p2Base.uid, p2Base);
+      p1Data.x = 0.25; p1Data.y = 0.6;
+      p2Data.x = 0.75; p2Data.y = 0.4;
+      matches.push({
+        id: `m_${Date.now()}_${i}_${Math.random().toString(36).slice(2,6)}`,
+        p1: p1Data, p2: p2Data,
+        status: 'active', startedAt: Date.now(),
+        matchEndTime: Date.now() + MATCH_DURATION,
+        winner: null, loser: null
+      });
+    }
+
+    const roundNum = (data.round || 0) + 1;
+
+    // ✅ إذا فيه byePlayer، عامله كفائز بالجولة (بدون مباراة)
+    if(byePlayer){
+      const players = (data.players || []).map(p => {
+        if(p.uid === byePlayer.uid) return {...p, wins:(p.wins||0)+1};
+        return p;
+      });
+      await updateDoc(doc(db,'timeGatesTournament','current'), { players });
+    }
+
+    // ✅ إذا كان هناك byePlayer فقط ولا مباريات → ابدأ جولة جديدة مباشرة
+    if(matches.length === 0 && byePlayer){
+      creatingNextRound = false;
+      setTimeout(()=>{ generateNextRound(); }, 1000);
+      return;
+    }
+
+    await setDoc(doc(db,'timeGatesTournament','currentRound'), {
+      roundNumber: roundNum,
+      status: 'active',
+      matches,
+      byePlayer: byePlayer ? { uid: byePlayer.uid, name: byePlayer.name, avatar: byePlayer.avatar } : null,
+      startedAt: Date.now()
+    });
+
+    await updateDoc(doc(db,'timeGatesTournament','current'), { round: roundNum });
+  }catch(e){ console.error(e); }
+  creatingNextRound = false;
+}
+
+async function eliminateTournLoser(loserUid, winnerUid){
+  try{
+    const curSnap = await getDoc(doc(db,'timeGatesTournament','current'));
+    if(!curSnap.exists()) return;
+    const data = curSnap.data();
+    const players = (data.players || []).map(p=>{
+      if(p.uid === loserUid) return {...p, status:'eliminated', eliminatedAt: Date.now()};
+      if(p.uid === winnerUid) return {...p, wins:(p.wins||0)+1};
+      return p;
+    });
+    await setDoc(doc(db,'timeGatesTournament','current'), { players }, {merge:true});
+  }catch(e){ console.error(e); }
+}
+
+// ✅ الدالة الأهم: التحقق من انتهاء الجولة + بدء الجولة التالية
+async function checkRoundAndAdvance(){
+  if(processingRound) return;
+  processingRound = true;
+  try{
+    const roundSnap = await getDoc(doc(db,'timeGatesTournament','currentRound'));
+    if(!roundSnap.exists()){ processingRound = false; return; }
+    const round = roundSnap.data();
+    const matches = round.matches || [];
+    
+    // ✅ هل كل المباريات انتهت؟
+    const allFinished = matches.length > 0 && matches.every(m => m.status === 'finished');
+    if(!allFinished){ processingRound = false; return; }
+
+    // ✅ احذف الجولة الحالية
+    await deleteDoc(doc(db,'timeGatesTournament','currentRound'));
+
+    // ✅ احصل على البيانات الحالية
+    const curSnap = await getDoc(doc(db,'timeGatesTournament','current'));
+    if(!curSnap.exists()){ processingRound = false; return; }
+    const data = curSnap.data();
+    const active = (data.players || []).filter(p=>p.status === 'active');
+
+    // ✅ إذا انتهت البطولة
+    if(active.length <= 1){
+      await finishTournament(active[0] || null, data.players || []);
+      processingRound = false;
+      return;
+    }
+
+    // ✅ ابدأ الجولة التالية بعد تأخير قصير
+    setTimeout(async()=>{
+      processingRound = false;
+      await generateNextRound();
+    }, ROUND_DELAY);
+
+  }catch(e){ console.error(e); processingRound = false; }
+}
+
+async function finishTournament(champion, players){
+  try{
+    const sorted = [...players].sort((a,b)=>{
+      if(champion && a.uid === champion.uid) return -1;
+      if(champion && b.uid === champion.uid) return 1;
+      return (b.wins||0) - (a.wins||0);
+    });
+    const rankings = sorted.map((p,i)=>({ rank:i+1, uid:p.uid, name:p.name, avatar:p.avatar, wins:p.wins||0 }));
+
+    const prizes = tournState.prizes || {p1:500,p2:300,p3:200,p4:100};
+    const prizeArr = [prizes.p1, prizes.p2, prizes.p3, prizes.p4];
+    for(let i=0; i<Math.min(4, rankings.length); i++){
+      const r = rankings[i];
+      const pts = prizeArr[i] || 0;
+      if(pts > 0){
+        try{ await updateDoc(doc(db,'timeGatesProfiles', r.uid), { points: increment(pts) }); }catch(e){}
+      }
+    }
+
+    const histSnap = await getDoc(doc(db,'timeGatesTournament','history'));
+    const history = histSnap.exists() ? (histSnap.data().history || []) : [];
+    history.push({
+      startedAt: tournState.startedAt,
+      endedAt: Date.now(),
+      name: tournState.name || 'البطولة',
+      image: tournState.image || '',
+      description: tournState.description || '',
+      prizes: tournState.prizes,
+      rankings
+    });
+    await setDoc(doc(db,'timeGatesTournament','history'), { history });
+    await setDoc(doc(db,'timeGatesTournament','current'), {
+      status:'finished',
+      champion: champion ? { uid:champion.uid, name:champion.name, avatar:champion.avatar } : null
+    }, {merge:true});
+    try{ await deleteDoc(doc(db,'timeGatesTournament','currentRound')); }catch(e){}
+    if(champion) showSMsg(`👑 بطل البطولة: ${champion.name}`,'win',6000);
+  }catch(e){ console.error(e); }
+}
+
+/* ============ ARENA ============ */
+function charToHtml(c){
+  if(!c) return '❓';
+  if(c.img) return `<img src="${c.img}" onerror="this.outerHTML='<span>${c.emoji||'❓'}</span>'">`;
+  return `<span>${c.emoji||'❓'}</span>`;
+}
+function setFighterBody(el, charDef, sizeW, sizeH){
+  el.style.width=sizeW+'px'; el.style.height=sizeH+'px';
+  el.innerHTML=charToHtml(charDef);
+}
+
+async function startTournBattle(match, round){
+  if(!currentUser || battle) return;
+  const isP1 = match.p1.uid === currentUser.uid;
+  const me = isP1 ? match.p1 : match.p2;
+  const opp = isP1 ? match.p2 : match.p1;
+
+  const myCharDef = { emoji: me.charEmoji || '🧙', img: me.charImg || '', name: me.name };
+  const oppCharDef = { emoji: opp.charEmoji || '🐉', img: opp.charImg || '', name: opp.name };
+  const mySizeW = me.sizeW || 70, mySizeH = me.sizeH || 70;
+
+  let bg = 'linear-gradient(135deg,#1a1a2e,#16213e)';
+  if(globalBgUrl) bg = `url('${globalBgUrl}') center/cover no-repeat`;
+
+  setFighterBody($('figMeBody'), myCharDef, mySizeW, mySizeH);
+  setFighterBody($('figEnBody'), oppCharDef, opp.sizeW || 70, opp.sizeH || 70);
+  $('hudMeAv').innerHTML = charToHtml(myCharDef);
+  $('hudEnAv').innerHTML = charToHtml(oppCharDef);
+  $('hudMeNm').textContent = me.name;
+  $('hudEnNm').textContent = opp.name;
+  $('arenaBg').style.background = bg;
+
+  const wp = WEAPONS.find(w=>w.id===me.weaponId) || WEAPONS[0];
+  const wpIco = wp.img
+    ? `<img class="atk-ico" src="${wp.img}" onerror="this.outerHTML='<span>${wp.emoji||'⚔️'}</span>'">`
+    : `<span>${wp.emoji||'⚔️'}</span>`;
+  $('btnAttack').innerHTML = `<i class="bi bi-crosshair"></i> ${wpIco} ${wp.name||''}`;
+
+  battle = {
+    mode: 'tournament', tournamentMatchId: match.id,
+    roundNumber: round.roundNumber,
+    opponentUid: opp.uid, opponentName: opp.name,
+    myX: isP1 ? 0.25 : 0.75, myY: isP1 ? 0.6 : 0.4,
+    enX: isP1 ? 0.75 : 0.25, enY: isP1 ? 0.4 : 0.6,
+    myHp: me.hp !== undefined ? me.hp : MAX_HP,
+    enHp: opp.hp !== undefined ? opp.hp : MAX_HP,
+    myMaxHp: MAX_HP, enMaxHp: MAX_HP,
+    projectiles: [], running: true,
+    lastShoot: 0, hitCooldown: 0,
+    isP1, ended: false,
+    matchEndTime: match.matchEndTime || (Date.now() + MATCH_DURATION),
+    _lastMyHp: -1, _lastEnHp: -1
+  };
+
+  $('arena').classList.add('on');
+  setupFieldTouch();
+  positionFighters();
+  startBattleLoop();
+  startMatchTimer();
+  listenTournBattleGame(match.id);
+  listenTournBattleChat(match.id);
+  setTimeout(sendTournMyPosition, 300);
+  showSMsg(`🏆 الجولة ${round.roundNumber} - ضد ${opp.name}`, 'default', 1500);
+}
+
+function positionFighters(){
+  if(!battle) return;
+  const f = getFieldRect();
+  $('fighterMe').style.transform = `translate3d(${battle.myX*f.width}px,${battle.myY*f.height}px,0) translate(-50%,-50%)`;
+  $('fighterEn').style.transform = `translate3d(${battle.enX*f.width}px,${battle.enY*f.height}px,0) translate(-50%,-50%)`;
+  if(battle._lastMyHp !== battle.myHp){
+    battle._lastMyHp = battle.myHp;
+    const pct = (Math.max(0,battle.myHp)/battle.myMaxHp*100)+'%';
+    $('figMeHp').style.width = pct; $('hudMeHp').style.width = pct;
+    $('hudMeHpTxt').textContent = Math.max(0,Math.round(battle.myHp));
+  }
+  if(battle._lastEnHp !== battle.enHp){
+    battle._lastEnHp = battle.enHp;
+    const pct = (Math.max(0,battle.enHp)/battle.enMaxHp*100)+'%';
+    $('figEnHp').style.width = pct; $('hudEnHp').style.width = pct;
+    $('hudEnHpTxt').textContent = Math.max(0,Math.round(battle.enHp));
+  }
+}
+
+function startBattleLoop(){
+  if(battleRafId) cancelAnimationFrame(battleRafId);
+  battleLastTick = 0;
+  function tick(now){
+    battleRafId = requestAnimationFrame(tick);
+    if(!battle || !battle.running) return;
+    if(now - battleLastTick < 33) return;
+    battleLastTick = now;
+    moveProjectiles();
+    checkHits();
+    positionFighters();
+  }
+  battleRafId = requestAnimationFrame(tick);
+}
+
+function moveProjectiles(){
+  if(!battle) return;
+  const field = $('arenaField');
+  const f = getFieldRect();
+  const activeIds = new Set();
+  battle.projectiles.forEach(p => {
+    p.x += p.vx; p.y += p.vy; p.life--;
+    activeIds.add(p.id);
+    let el = projElMap.get(p.id);
+    if(!el){
+      el = document.createElement('div');
+      const hasImg = p.img && p.owner==='me';
+      if(hasImg){
+        el.className='projectile'; el.style.width='30px'; el.style.height='30px';
+        el.innerHTML=`<img src="${p.img}" onerror="this.parentNode.className='projectile noimg ${p.cls||'mine'}';this.parentNode.innerHTML=''">`;
+      } else {
+        el.className='projectile noimg '+(p.owner==='enemy'?'enemy':(p.cls||'mine'));
+      }
+      field.appendChild(el);
+      projElMap.set(p.id, el);
+    }
+    el.style.transform = `translate3d(${p.x*f.width}px,${p.y*f.height}px,0) translate(-50%,-50%)`;
+  });
+  projElMap.forEach((el, id) => { if(!activeIds.has(id)){ el.remove(); projElMap.delete(id); } });
+  battle.projectiles = battle.projectiles.filter(p => p.life > 0 && p.x > 0 && p.x < 1 && p.y > 0 && p.y < 1);
+}
+
+function checkHits(){
+  if(!battle) return;
+  const now = Date.now();
+  if(now < battle.hitCooldown) return;
+  battle.projectiles.forEach(p => {
+    if(p.hit) return;
+    if(p.owner === 'me'){
+      const dist = Math.hypot(p.x - battle.enX, p.y - battle.enY);
+      if(dist < 0.05){
+        p.hit = true; battle.enHp -= p.dmg;
+        addHitFx(battle.enX, battle.enY, 'cyan'); sfxHit();
+        battle.hitCooldown = now + 60;
+        updateMatchHp(battle.tournamentMatchId, battle.isP1 ? 'p2' : 'p1', Math.max(0, battle.enHp));
+        if(battle.enHp <= 0 && !battle.ended){ battle.ended = true; endTournBattle(true); }
+      }
+    } else {
+      const dist = Math.hypot(p.x - battle.myX, p.y - battle.myY);
+      if(dist < 0.05){
+        p.hit = true; battle.myHp -= p.dmg;
+        addHitFx(battle.myX, battle.myY, 'red'); sfxHit();
+        battle.hitCooldown = now + 60;
+        updateMatchHp(battle.tournamentMatchId, battle.isP1 ? 'p1' : 'p2', Math.max(0, battle.myHp));
+        if(battle.myHp <= 0 && !battle.ended){ battle.ended = true; endTournBattle(false); }
+      }
+    }
+  });
+  battle.projectiles = battle.projectiles.filter(p => !p.hit);
+}
+
+async function updateMatchHp(matchId, field, hp){
+  try{
+    const roundSnap = await getDoc(doc(db,'timeGatesTournament','currentRound'));
+    if(!roundSnap.exists()) return;
+    const round = roundSnap.data();
+    const matches = round.matches || [];
+    const idx = matches.findIndex(m => m.id === matchId);
+    if(idx === -1) return;
+    matches[idx][field].hp = hp;
+    await updateDoc(doc(db,'timeGatesTournament','currentRound'), { matches });
+  }catch(e){}
+}
+
+function addHitFx(x,y,cls){
+  const f = getFieldRect();
+  const el = document.createElement('div');
+  el.className = 'hit-fx ' + (cls==='red'?'red':'');
+  el.style.transform = `translate3d(${x*f.width}px,${y*f.height}px,0) translate(-50%,-50%)`;
+  el.style.opacity = '0.9';
+  $('arenaField').appendChild(el);
+  let op = 0.9;
+  const fade = setInterval(()=>{ op -= 0.15; el.style.opacity = op; if(op <= 0){ clearInterval(fade); el.remove(); } }, 50);
+}
+
+window.startAttack = function(){
+  if(!battle || !battle.running) return;
+  const now = Date.now();
+  if(now - battle.lastShoot < 250) return;
+  battle.lastShoot = now;
+  const wp = WEAPONS.find(w=>w.id===myCharConfig.weaponId) || WEAPONS[0];
+  const dx = battle.enX - battle.myX, dy = battle.enY - battle.myY;
+  const d = Math.hypot(dx,dy) || 1;
+  const proj = {
+    id:'m'+now+Math.random(),
+    x: battle.myX, y: battle.myY,
+    vx: dx/d*0.018, vy: dy/d*0.018,
+    owner:'me', dmg:(wp.power/6)*10,
+    cls: wp.cls||'mine', life:120, img: wp.img||''
+  };
+  battle.projectiles.push(proj);
+  if(wp.sound) playSound(wp.sound); else sfxShoot();
+  addDoc(collection(db,'timeGatesTournament','currentRound','matches',battle.tournamentMatchId,'shots'), {
+    x: proj.x, y: proj.y, vx: proj.vx, vy: proj.vy,
+    dmg: proj.dmg, cls: proj.cls, img: proj.img,
+    ownerUid: currentUser.uid, ts: Date.now()
+  }).catch(()=>{});
+};
+
+function startMatchTimer(){
+  if(matchTimerInterval){ clearInterval(matchTimerInterval); matchTimerInterval = null; }
+  const timerEl = $('matchTimer');
+  const upd = ()=>{
+    if(!battle || !battle.running){ clearInterval(matchTimerInterval); matchTimerInterval = null; return; }
+    const end = battle.matchEndTime || (Date.now()+MATCH_DURATION);
+    const remaining = Math.max(0, Math.floor((end - Date.now())/1000));
+    const m = Math.floor(remaining/60), s = remaining%60;
+    timerEl.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+    if(remaining <= 30) timerEl.classList.add('danger');
+    else timerEl.classList.remove('danger');
+    if(remaining <= 0){ clearInterval(matchTimerInterval); matchTimerInterval = null; finishByTime(); }
+  };
+  upd();
+  matchTimerInterval = setInterval(upd, 500);
+}
+
+function stopMatchTimer(){
+  if(matchTimerInterval){ clearInterval(matchTimerInterval); matchTimerInterval = null; }
+  const t = $('matchTimer'); if(t){ t.textContent='05:00'; t.classList.remove('danger'); }
+}
+
+async function finishByTime(){
+  if(!battle || !battle.running || battle.ended) return;
+  battle.ended = true; battle.running = false;
+  if(battleRafId){ cancelAnimationFrame(battleRafId); battleRafId = null; }
+  const myHp = battle.myHp, oppHp = battle.enHp;
+  let iWon = myHp > oppHp;
+  if(myHp === oppHp) iWon = Math.random() < 0.5;
+  showSMsg(iWon ? '⏱️ فزت بالوقت!' : '⏱️ خسرت بالوقت!', iWon?'win':'lose', 3000);
+  await endTournBattle(iWon);
+}
+
+function listenTournBattleGame(matchId){
+  if(battleUnsub) battleUnsub();
+  battleUnsub = onSnapshot(doc(db,'timeGatesTournament','currentRound'), snap=>{
+    if(!snap.exists()){ if(battle) leaveArena(); return; }
+    const round = snap.data();
+    if(!battle || battle.mode !== 'tournament') return;
+    const myMatch = (round.matches || []).find(m => m.id === matchId);
+    if(!myMatch) return;
+    const iAmP1 = battle.isP1;
+    const myData = iAmP1 ? myMatch.p1 : myMatch.p2;
+    const oppData = iAmP1 ? myMatch.p2 : myMatch.p1;
+    if(oppData.x !== undefined) battle.enX = oppData.x;
+    if(oppData.y !== undefined) battle.enY = oppData.y;
+    if(oppData.hp !== undefined) battle.enHp = oppData.hp;
+    if(myData.hp !== undefined) battle.myHp = myData.hp;
+    positionFighters();
+    if(battle.enHp <= 0 && !battle.ended){ battle.ended = true; endTournBattle(true); }
+    else if(battle.myHp <= 0 && !battle.ended){ battle.ended = true; endTournBattle(false); }
+    if(myMatch.status === 'finished' && myMatch.winner && battle.running){
+      battle.running = false;
+      const iWon = myMatch.winner.uid === currentUser.uid;
+      if(iWon){ sfxWin(); showSMsg('🏆 فزت! في انتظار الجولة القادمة...','win',3500); }
+      else { sfxLose(); showSMsg('💀 خسرت! خرجت من البطولة','lose',3500); }
+      setTimeout(()=>{ leaveArena(); }, 3000);
+    }
+  });
+  if(battleShotUnsub) battleShotUnsub();
+  const shotsRef = collection(db,'timeGatesTournament','currentRound','matches',matchId,'shots');
+  const q = query(shotsRef, orderBy('ts','desc'), limit(30));
+  battleShotUnsub = onSnapshot(q, snap=>{
+    snap.docChanges().forEach(ch=>{
+      if(ch.type !== 'added') return;
+      const s = ch.doc.data();
+      if(!s.ownerUid || s.ownerUid === currentUser.uid) return;
+      if(Date.now() - (s.ts||0) > 3000) return;
+      if(battle && battle.mode === 'tournament'){
+        battle.projectiles.push({ id: ch.doc.id, x: s.x, y: s.y, vx: s.vx, vy: s.vy, owner:'enemy', dmg: s.dmg||8, cls: s.cls||'mine', life:120, img: s.img||'' });
+      }
+    });
+  });
+}
+
+function listenTournBattleChat(matchId){
+  if(battleChatUnsub) battleChatUnsub();
+  const chatRef = collection(db,'timeGatesTournament','currentRound','matches',matchId,'chat');
+  const q = query(chatRef, orderBy('ts','desc'), limit(15));
+  let first = true;
+  battleChatUnsub = onSnapshot(q, snap=>{
+    if(first){ first = false; return; }
+    snap.docChanges().forEach(ch=>{
+      if(ch.type !== 'added') return;
+      const m = ch.doc.data();
+      if(m.senderId === currentUser.uid) return;
+      if(Date.now() - (m.ts||0) > 5000) return;
+      sfxMsgRecv(); showArenaMsg(m);
+    });
+  });
+}
+
+function showArenaMsg(msg){
+  const field = $('arenaField'); if(!field) return;
+  const el = document.createElement('div');
+  el.className = 'arena-msg';
+  const av = msg.senderAvatar ? `<img src="${msg.senderAvatar}" onerror="this.parentNode.textContent='${(msg.senderName||'?').charAt(0)}'">` : (msg.senderName||'?').charAt(0);
+  el.innerHTML = `<div class="arena-msg-av">${av}</div><div class="arena-msg-body"><div class="arena-msg-name">${msg.senderName||''}</div><div class="arena-msg-txt">${msg.text||''}</div></div>`;
+  field.appendChild(el);
+  requestAnimationFrame(()=>el.classList.add('on'));
+  setTimeout(()=>{ el.classList.remove('on'); setTimeout(()=>el.remove(),400); }, 5000);
+}
+
+window.toggleChatOverlay = function(){
+  if(!battle || battle.mode !== 'tournament') return;
+  const ov = $('chatOverlay');
+  ov.classList.toggle('on');
+  if(ov.classList.contains('on')) setTimeout(()=>$('chatInputInline')?.focus(), 100);
+};
+
+window.sendChatInline = async function(){
+  if(!battle || battle.mode !== 'tournament') return;
+  const inp = $('chatInputInline');
+  const txt = (inp.value || '').trim();
+  if(!txt) return;
+  try{
+    await addDoc(collection(db,'timeGatesTournament','currentRound','matches',battle.tournamentMatchId,'chat'), {
+      text: txt, senderId: currentUser.uid,
+      senderName: myProfile.name, senderAvatar: myProfile.avatar || '',
+      ts: Date.now(), createdAt: serverTimestamp()
+    });
+    inp.value = ''; $('chatOverlay').classList.remove('on');
+    showToast('✅','تم');
+  }catch(e){ showToast('❌','فشل'); }
+};
+
+document.addEventListener('keydown', e=>{
+  if(e.key === 'Enter' && document.activeElement?.id === 'chatInputInline') sendChatInline();
+});
+
+function setupFieldTouch(){
+  const field = $('arenaField');
+  field.onpointerdown = (e)=>{
+    if(!battle || !battle.running) return;
+    if(e.target.closest('.chat-overlay')) return;
+    fieldTouchActive = true;
+    try{ field.setPointerCapture(e.pointerId); }catch(err){}
+    moveToTouch(e); e.preventDefault();
+  };
+  field.onpointermove = (e)=>{
+    if(!fieldTouchActive || !battle || !battle.running) return;
+    moveToTouch(e); e.preventDefault();
+  };
+  field.onpointerup = ()=>{ fieldTouchActive = false; };
+  field.onpointercancel = ()=>{ fieldTouchActive = false; };
+}
+
+function moveToTouch(e){
+  if(!battle) return;
+  const r = getFieldRect();
+  const x = (e.clientX - r.left) / r.width;
+  const y = (e.clientY - r.top) / r.height;
+  battle.myX = Math.max(0.06, Math.min(0.94, x));
+  battle.myY = Math.max(0.12, Math.min(0.88, y));
+  positionFighters();
+  sendTournMyPosition();
+}
+
+async function sendTournMyPosition(){
+  if(!battle || battle.mode !== 'tournament' || !battle.tournamentMatchId) return;
+  if(pendingPos) return;
+  const now = Date.now();
+  if(now - lastPosSend < 100) return;
+  lastPosSend = now; pendingPos = true;
+  try{
+    const roundSnap = await getDoc(doc(db,'timeGatesTournament','currentRound'));
+    if(!roundSnap.exists()){ pendingPos = false; return; }
+    const round = roundSnap.data();
+    const matches = round.matches || [];
+    const idx = matches.findIndex(m => m.id === battle.tournamentMatchId);
+    if(idx === -1){ pendingPos = false; return; }
+    const field = 'p' + (battle.isP1 ? '1' : '2');
+    matches[idx][field].x = battle.myX;
+    matches[idx][field].y = battle.myY;
+    matches[idx][field].hp = battle.myHp;
+    await updateDoc(doc(db,'timeGatesTournament','currentRound'), { matches });
+  }catch(e){}
+  pendingPos = false;
+}
+
+async function endTournBattle(win){
+  if(!battle || !battle.running) return;
+  battle.running = false;
+  stopMatchTimer();
+  if(battleRafId){ cancelAnimationFrame(battleRafId); battleRafId = null; }
+  projElMap.forEach(el=>el.remove()); projElMap.clear();
+
+  const matchId = battle.tournamentMatchId;
+  const isP1 = battle.isP1;
+
+  try{
+    const roundSnap = await getDoc(doc(db,'timeGatesTournament','currentRound'));
+    if(!roundSnap.exists()) return;
+    const round = roundSnap.data();
+    const matches = round.matches || [];
+    const idx = matches.findIndex(m => m.id === matchId);
+    if(idx === -1) return;
+    const m = matches[idx];
+
+    if(m.status === 'active'){
+      const winner = win ? (isP1 ? m.p1 : m.p2) : (isP1 ? m.p2 : m.p1);
+      const loser = win ? (isP1 ? m.p2 : m.p1) : (isP1 ? m.p1 : m.p2);
+      matches[idx].status = 'finished';
+      matches[idx].winner = { uid: winner.uid, name: winner.name, avatar: winner.avatar };
+      matches[idx].loser = { uid: loser.uid, name: loser.name, avatar: loser.avatar };
+      matches[idx].finishedAt = Date.now();
+
+      await updateDoc(doc(db,'timeGatesTournament','currentRound'), { matches });
+      await eliminateTournLoser(loser.uid, winner.uid);
+      
+      // ✅ فحص فوري للجولة
+      await checkRoundAndAdvance();
+    }
+  }catch(e){ console.error(e); }
+
+  if(win){ sfxWin(); showSMsg('🏆 فزت! في انتظار الجولة القادمة...','win',3500); }
+  else { sfxLose(); showSMsg('💀 خسرت!','lose',2500); }
+  setTimeout(()=>{ leaveArena(); }, 3000);
+}
+
+function leaveArena(){
+  if(battleRafId){ cancelAnimationFrame(battleRafId); battleRafId = null; }
+  stopMatchTimer();
+  if(battleUnsub){ battleUnsub(); battleUnsub = null; }
+  if(battleShotUnsub){ battleShotUnsub(); battleShotUnsub = null; }
+  if(battleChatUnsub){ battleChatUnsub(); battleChatUnsub = null; }
+  battle = null; fieldTouchActive = false;
+  $('arena').classList.remove('on');
+  $('chatOverlay').classList.remove('on');
+  projElMap.forEach(el=>el.remove()); projElMap.clear();
+  document.querySelectorAll('.hit-fx,.arena-msg').forEach(e=>e.remove());
+  activeAudios.forEach(a=>{ try{a.pause();}catch(e){} }); activeAudios.clear();
+}
+window.leaveArena = leaveArena;
+
+window.leaveArenaManual = async function(){
+  if(!battle) return;
+  if(!confirm('⚠️ الانسحاب يعني الخروج من البطولة. متابعة؟')) return;
+  const iAmP1 = battle.isP1;
+  try{
+    const roundSnap = await getDoc(doc(db,'timeGatesTournament','currentRound'));
+    if(roundSnap.exists()){
+      const round = roundSnap.data();
+      const matches = round.matches || [];
+      const idx = matches.findIndex(m => m.id === battle.tournamentMatchId);
+      if(idx !== -1 && matches[idx].status === 'active'){
+        const m = matches[idx];
+        const winner = iAmP1 ? m.p2 : m.p1;
+        const loser = iAmP1 ? m.p1 : m.p2;
+        matches[idx].status = 'finished';
+        matches[idx].winner = { uid: winner.uid, name: winner.name, avatar: winner.avatar };
+        matches[idx].loser = { uid: loser.uid, name: loser.name, avatar: loser.avatar };
+        matches[idx].finishedAt = Date.now();
+        await updateDoc(doc(db,'timeGatesTournament','currentRound'), { matches });
+        await eliminateTournLoser(loser.uid, winner.uid);
+        await checkRoundAndAdvance();
+      }
+    }
+  }catch(e){}
+  battle.ended = true; battle.running = false;
+  if(battleRafId){ cancelAnimationFrame(battleRafId); battleRafId = null; }
+  sfxLose(); showSMsg('💀 انسحبت! خرجت من البطولة','lose',2500);
+  setTimeout(()=>{ leaveArena(); }, 2400);
+};
+
+/* ============ DETECTION: Check for stale rounds ============ */
+setInterval(async()=>{
+  if(!currentUser) return;
+  if(tournState.status !== 'running') return;
+  if(battle) return;
+  if(processingRound || creatingNextRound) return;
+  
+  // إذا كان هناك round معلق لوقت طويل
+  if(currentRoundData && currentRoundData.matches){
+    const matches = currentRoundData.matches;
+    const allFinished = matches.length > 0 && matches.every(m => m.status === 'finished');
+    const lastFinish = Math.max(...matches.filter(m=>m.finishedAt).map(m=>m.finishedAt || 0));
+    const stale = allFinished && (Date.now() - lastFinish > 10000);
+    
+    if(stale){
+      // إجبار الجولة على التقدم
+      const roundNum = tournState.round;
+      await checkRoundAndAdvance();
+    }
+  }
+  
+  // إذا لم يكن هناك round لكن البطولة running واللاعبون > 1
+  if(!currentRoundData){
+    const active = [...tournPlayersMap.values()].filter(p=>p.status === 'active');
+    if(active.length >= 2){
+      const startTime = tournState.startedAt || 0;
+      const sinceStart = Date.now() - startTime;
+      if(sinceStart > 15000){
+        // حالة تعافٍ: أعد بدء الجولة
+        showToast('🔄','إعادة تشغيل الجولة...');
+        await generateNextRound();
+      }
+    }
+  }
+}, 8000);
+
+window.addEventListener('resize', ()=>{ fieldRectCache = null; });
+</script>
+</body>
+</html>
