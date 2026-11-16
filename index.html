@@ -134,16 +134,16 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .sheet-photos-grid.photos-6{grid-template-columns:repeat(2,1fr)}
 .sheet-photos-grid.photos-9{grid-template-columns:repeat(3,1fr)}
 .s-img{width:100%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;border:none;position:relative}
-.s-img img{width:100%;height:100%;object-fit:contain;display:block;transition:transform .1s}
+.s-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .1s}
 .s-img.blank{background:#fff}
 .s-img.hidden-card{background:#fff !important;border:none}
 .full-image-wrap{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.full-image-wrap img{width:100%;height:100%;object-fit:contain;display:block}
+.full-image-wrap img{width:100%;height:100%;object-fit:cover;display:block}
 .drag-handle{position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:6px;background:rgba(15,23,42,.7);color:#fff;font-size:11px;display:none;align-items:center;justify-content:center;z-index:10;cursor:grab;pointer-events:auto}
 .sheet-item:hover .drag-handle{display:flex}
 
 .cropped-img-wrap{position:relative;width:100%;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:2px}
-.cropped-img-wrap img{width:100%;height:100%;object-fit:contain;display:block;backface-visibility:hidden;transform-origin:center center}
+.cropped-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;backface-visibility:hidden;transform-origin:center center}
 
 .print-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .print-actions button{flex:1;min-width:130px;padding:12px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:7px}
@@ -160,7 +160,7 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .id-card{background:#fff;border-radius:10px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,.06);position:relative;border:1px solid var(--border)}
 .id-card-label{font-size:10px;font-weight:900;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:4px}
 .id-card-img{width:100%;background:#f1f5f9;border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;position:relative;border:1.5px dashed var(--border)}
-.id-card-img img{width:100%;height:100%;object-fit:contain;display:block}
+.id-card-img img{width:100%;height:100%;object-fit:cover;display:block}
 .id-card-img.empty{color:var(--muted);font-size:11px;text-align:center;padding:10px;flex-direction:column;gap:4px}
 .id-card-img.empty i{font-size:22px;opacity:.5}
 .id-card-img.hidden-card{background:#fff !important;border:1px dashed #cbd5e1}
@@ -232,6 +232,7 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 /* Crop box */
 .crop-box{position:absolute;border:2px dashed #fff;box-shadow:0 0 0 1px rgba(0,0,0,.5);z-index:4;pointer-events:auto;touch-action:none;box-sizing:border-box}
 .crop-box::before{content:"";position:absolute;inset:0;pointer-events:none;border:1px solid rgba(255,255,255,.3)}
+.crop-box::after{content:"";position:absolute;inset:-9999px;background:rgba(0,0,0,.55);pointer-events:none;z-index:-1}
 .crop-handle{position:absolute;width:18px;height:18px;background:#fff;border:2px solid var(--gold);border-radius:50%;pointer-events:auto;touch-action:none;z-index:5;box-shadow:0 1px 4px rgba(0,0,0,.4)}
 .crop-handle[data-h="nw"]{left:-9px;top:-9px;cursor:nwse-resize}
 .crop-handle[data-h="n"] {left:50%;top:-9px;margin-left:-9px;cursor:ns-resize}
@@ -634,8 +635,8 @@ let selectedPaper = 'A4';
 let pickerTarget = null;
 let currentEditingType = 'id';
 let dragSourceEl = null;
-const STORAGE_KEY = 'amir_press_projects_v7';
-const GLOBAL_SIZES_KEY = 'amir_press_global_sizes_v4';
+const STORAGE_KEY = 'amir_press_projects_v8';
+const GLOBAL_SIZES_KEY = 'amir_press_global_sizes_v5';
 
 const CROP_MIN_ZOOM = 0.1;
 const CROP_MAX_ZOOM = 5;
@@ -645,6 +646,7 @@ const PAIR_GAP_PX = 6;
 const PHOTO_GAP_PX = 6;
 const ITEM_GAP_PX = 6;
 
+/* ★★★ القياسات القديمة كما هي — لم تلمس ★★★ */
 const DEFAULT_SIZES = {
   id:        { w: 5.0, h: 2.8 },
   residency: { w: 8.5,  h: 5.5 },
@@ -1100,6 +1102,7 @@ function handleFile(e){
     const pair = currentProject.ids.find(p=>p.id === pickerTarget.pairId);
     if(pair){
       pair[pickerTarget.side] = ev.target.result;
+      pair['final_' + pickerTarget.side] = null; // مسح الصورة النهائية القديمة
       if(!pair.crops) pair.crops = {};
       pair.crops[pickerTarget.side] = { x:0, y:0, zoom:1, rotate:0, quality:'high', box:null };
       persistProjects();
@@ -1112,6 +1115,15 @@ function handleFile(e){
   reader.readAsDataURL(file);
 }
 
+/* ============================================================
+   ★★★ CROP ENGINE المطور — قص بدقة عالية عبر Canvas ★★★
+   - الصورة كاملة تظهر في نافذة القص (contain)
+   - المعتم خارج مربع التحديد واضح
+   - عند التطبيق: نرسم النتيجة النهائية على canvas بدقة عالية
+     بأبعاد القالب بالضبط (بدون تشويه، بدون فراغات)
+   - نحفظ الناتج في pair.final_front/final_back
+   - العرض يستخدم final_ مباشرة → دقة مضمونة
+================================================================ */
 let cropState = null;
 let cropPointers = new Map();
 let cropDrag = null;
@@ -1524,23 +1536,130 @@ function cancelCrop(){
   closeModal('cropModal');
 }
 
-function applyCrop(){
+/* ★★★ رسم الصورة النهائية على Canvas بأبعاد القالب بدقة عالية ★★★ */
+function loadImageEl(src){
+  return new Promise((res, rej)=>{
+    const im = new Image();
+    im.crossOrigin = 'anonymous';
+    im.onload = ()=>res(im);
+    im.onerror = rej;
+    im.src = src;
+  });
+}
+
+async function renderFinalImage(pair, side, outW, outH){
+  const src = pair[side];
+  if(!src) return null;
+
+  const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1, rotate:0, quality:'high', box:null };
+  const rot = crop.rotate || 0;
+  const zoom = crop.zoom || 1;
+  const box = crop.box || { x:0, y:0, w:1, h:1 };
+  const q = crop.quality || 'high';
+
+  const img = await loadImageEl(src);
+  const iw = img.naturalWidth;
+  const ih = img.naturalHeight;
+
+  const W = Math.max(1, Math.round(outW));
+  const H = Math.max(1, Math.round(outH));
+
+  /* نعمل بدقة 3x ثم نصغّر → جودة فائقة */
+  const QUALITY_FACTOR = 3;
+  const workW = W * QUALITY_FACTOR;
+  const workH = H * QUALITY_FACTOR;
+
+  const work = document.createElement('canvas');
+  work.width = workW;
+  work.height = workH;
+  const wctx = work.getContext('2d');
+  wctx.imageSmoothingEnabled = true;
+  wctx.imageSmoothingQuality = 'high';
+  wctx.fillStyle = '#ffffff';
+  wctx.fillRect(0, 0, workW, workH);
+
+  const viewportRatio = workW / workH;
+  const imageRatio = iw / ih;
+  let baseW, baseH;
+  if(imageRatio > viewportRatio){
+    baseH = workH;
+    baseW = workH * imageRatio;
+  } else {
+    baseW = workW;
+    baseH = workW / imageRatio;
+  }
+
+  const bw = baseW * zoom;
+  const bh = baseH * zoom;
+
+  const cx = workW / 2;
+  const cy = workH / 2;
+
+  const panX = (crop.x / 100) * bw;
+  const panY = (crop.y / 100) * bh;
+
+  wctx.save();
+  wctx.translate(cx + panX, cy + panY);
+  wctx.rotate(rot * Math.PI / 180);
+  wctx.drawImage(img, -bw/2, -bh/2, bw, bh);
+  wctx.restore();
+
+  const bx = Math.max(0, Math.min(1, box.x)) * workW;
+  const by = Math.max(0, Math.min(1, box.y)) * workH;
+  const bwBox = Math.max(1, Math.min(1 - box.x, box.w) * workW);
+  const bhBox = Math.max(1, Math.min(1 - box.y, box.h) * workH);
+
+  const final = document.createElement('canvas');
+  final.width = W;
+  final.height = H;
+  const fctx = final.getContext('2d');
+  fctx.imageSmoothingEnabled = true;
+  fctx.imageSmoothingQuality = 'high';
+  fctx.fillStyle = '#ffffff';
+  fctx.fillRect(0, 0, W, H);
+  if('filter' in fctx) fctx.filter = getQualityFilter(q);
+  fctx.drawImage(work, bx, by, bwBox, bhBox, 0, 0, W, H);
+
+  return final.toDataURL('image/png');
+}
+
+async function applyCrop(){
   if(!cropState) return;
   const pair = currentProject.ids.find(p=>p.id === cropState.pairId);
-  if(pair){
-    if(!pair.crops) pair.crops = {};
-    pair.crops[cropState.side] = {
-      x: cropState.x, y: cropState.y,
-      zoom: cropState.zoom,
-      rotate: cropState.rotate,
-      quality: cropState.quality,
-      box: cropState.box ? { ...cropState.box } : null
-    };
-    persistProjects();
-    renderTypeItems();
-    renderLivePreview();
-    showToast('تم تطبيق القص والتدوير','✂️');
+  if(!pair){ cancelCrop(); return; }
+
+  const size = getEffectiveSize(pair.template);
+  /* دقة الطباعة: 120 بكسل/سم ≈ 305 DPI */
+  const targetW = Math.max(80, Math.round(size.w * 120));
+  const targetH = Math.max(80, Math.round(size.h * 120));
+
+  if(!pair.crops) pair.crops = {};
+  pair.crops[cropState.side] = {
+    x: cropState.x, y: cropState.y,
+    zoom: cropState.zoom,
+    rotate: cropState.rotate,
+    quality: cropState.quality,
+    box: cropState.box ? { ...cropState.box } : null
+  };
+
+  const side = cropState.side;
+
+  try{
+    const dataUrl = await renderFinalImage(pair, side, targetW, targetH);
+    if(dataUrl){
+      pair['final_' + side] = dataUrl;
+    }
+  }catch(err){
+    console.error('فشل توليد الصورة النهائية', err);
+    showToast('تعذّر معالجة الصورة', '⚠️');
+    return;
   }
+
+  persistProjects();
+  renderTypeItems();
+  renderLivePreview();
+  showToast('تم القص بأبعاد القالب بدقة ✅','✂️');
+
   cropState = null;
   cropDrag = null; cropPinch = null; cropBoxDrag = null;
   cropPointers.clear();
@@ -1666,68 +1785,15 @@ function getSortedItems(){
   });
 }
 
-/* ===================================================================
-   ★★★ الدالة المصححة لبناء الصورة المقصوصة ★★★
-   المنطق الجديد:
-   - عند وجود box (قص)، نكبّر الصورة بحيث أن المنطقة المحددة (box)
-     تملأ الإطار بالكامل — بدون أي فراغات أو تشويه أو نقص/زيادة.
-   - نحسب تكبيراً دقيقاً = 1/w و 1/h (نسبة معاكسة لأبعاد box).
-   - نزيح مركز الصورة بحيث يصبح مركز box هو مركز الإطار.
-   - نطبّق الـ pan الأصلي (x, y) بعد التكبير — ليتوافق مع معاينة القص.
-   - object-fit:contain يبقى كما هو (دقة القياس).
-   - القياسات والإعدادات لم تُلمس إطلاقاً.
-=================================================================== */
+/* ★★★ العرض: نستخدم final_ إذا موجود، وإلا الصورة الأصلية بـ cover ★★★ */
 function buildCroppedImageHTML(pair, side){
+  const finalKey = 'final_' + side;
+  if(pair[finalKey]){
+    return `<div class="cropped-img-wrap"><img src="${pair[finalKey]}" alt=""></div>`;
+  }
   const img = pair[side];
   if(!img) return '';
-
-  const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1, rotate:0, quality:'high', box:null };
-  const rot = crop.rotate || 0;
-  const q = crop.quality || 'high';
-  const baseZoom = crop.zoom || 1;
-  const panX = crop.x || 0;   // % من حجم الصورة المرئية
-  const panY = crop.y || 0;
-
-  // هل يوجد قص فعلي؟
-  const hasBox = crop.box && (
-    crop.box.w < 0.999 || crop.box.h < 0.999 ||
-    crop.box.x > 0.001 || crop.box.y > 0.001
-  );
-
-  // لا يوجد قص: نفس السلوك السابق تماماً (بدون أي تغيير)
-  if(!hasBox){
-    return `<div class="cropped-img-wrap">
-      <img src="${img}" style="position:absolute; top:50%; left:50%; width:100%; height:100%; object-fit:contain; transform: translate(-50%, -50%) translate(${panX}%, ${panY}%) rotate(${rot}deg) scale(${baseZoom}); filter:${getQualityFilter(q)};">
-    </div>`;
-  }
-
-  // يوجد قص: نحسب تكبيراً يجعل جزء box يملأ الإطار بالكامل
-  const bx = crop.box.x;
-  const by = crop.box.y;
-  const bw = crop.box.w;
-  const bh = crop.box.h;
-  const bcx = bx + bw / 2;   // مركز الـ box (0..1)
-  const bcy = by + bh / 2;
-
-  // نضاعف تكبير الصورة بحيث box تصبح بحجم الإطار:
-  // الإطار يمثّل 100% من الحاوية، وbox تمثّل bw×bh منه
-  // ∴ التكبير = 1/bw و 1/bh، ونأخذ المتوسط الهندسي المتناسب للحفاظ على التناسب
-  // لكن لضمان التغطية الكاملة نستخدم الأكبر (نفس سلوك "cover" مع box)
-  const extraZoom = Math.max(1 / bw, 1 / bh);
-  const finalZoom = baseZoom * extraZoom;
-
-  // الإزاحة المطلوبة: نحرّك الصورة بحيث bcx/bcy تصبح في منتصف الحاوية
-  // الإزاحة كنسبة من عرض الحاوية المرئي (بعد التكبير)
-  const offsetX = (0.5 - bcx) * 100;
-  const offsetY = (0.5 - bcy) * 100;
-
-  // نجمع مع الـ pan الأصلي
-  const totalTranslateX = offsetX + panX;
-  const totalTranslateY = offsetY + panY;
-
-  return `<div class="cropped-img-wrap">
-    <img src="${img}" style="position:absolute; top:50%; left:50%; width:100%; height:100%; object-fit:contain; transform: translate(-50%, -50%) translate(${totalTranslateX}%, ${totalTranslateY}%) rotate(${rot}deg) scale(${finalZoom}); filter:${getQualityFilter(q)};">
-  </div>`;
+  return `<div class="cropped-img-wrap"><img src="${img}" alt="" style="object-fit:cover"></div>`;
 }
 
 function buildSheetHTML(editable){
