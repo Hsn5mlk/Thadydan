@@ -8,7 +8,6 @@
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <style>
-/* ... same styles as before ... */
 :root{
   --bg:#f4f6fb; --ink:#1e293b; --muted:#64748b;
   --gold:#c8a45c; --gold2:#a17c3a; --accent:#2563eb;
@@ -135,16 +134,16 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .sheet-photos-grid.photos-6{grid-template-columns:repeat(2,1fr)}
 .sheet-photos-grid.photos-9{grid-template-columns:repeat(3,1fr)}
 .s-img{width:100%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;border:none;position:relative}
-.s-img img{width:100%;height:100%;object-fit:contain;display:block;transition:transform .1s}
+.s-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .1s}
 .s-img.blank{background:#fff}
 .s-img.hidden-card{background:#fff !important;border:none}
 .full-image-wrap{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.full-image-wrap img{width:100%;height:100%;object-fit:contain;display:block}
+.full-image-wrap img{width:100%;height:100%;object-fit:cover;display:block}
 .drag-handle{position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:6px;background:rgba(15,23,42,.7);color:#fff;font-size:11px;display:none;align-items:center;justify-content:center;z-index:10;cursor:grab;pointer-events:auto}
 .sheet-item:hover .drag-handle{display:flex}
 
 .cropped-img-wrap{position:relative;width:100%;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:2px}
-.cropped-img-wrap img{width:100%;height:100%;object-fit:contain;display:block;backface-visibility:hidden;transform-origin:center center}
+.cropped-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;backface-visibility:hidden;transform-origin:center center}
 
 .print-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
 .print-actions button{flex:1;min-width:130px;padding:12px;border-radius:12px;border:none;cursor:pointer;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:7px}
@@ -161,7 +160,7 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .id-card{background:#fff;border-radius:10px;padding:8px;box-shadow:0 2px 8px rgba(0,0,0,.06);position:relative;border:1px solid var(--border)}
 .id-card-label{font-size:10px;font-weight:900;color:var(--muted);margin-bottom:6px;display:flex;align-items:center;gap:4px}
 .id-card-img{width:100%;background:#f1f5f9;border-radius:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;cursor:pointer;position:relative;border:1.5px dashed var(--border)}
-.id-card-img img{width:100%;height:100%;object-fit:contain;display:block}
+.id-card-img img{width:100%;height:100%;object-fit:cover;display:block}
 .id-card-img.empty{color:var(--muted);font-size:11px;text-align:center;padding:10px;flex-direction:column;gap:4px}
 .id-card-img.empty i{font-size:22px;opacity:.5}
 .id-card-img.hidden-card{background:#fff !important;border:1px dashed #cbd5e1}
@@ -345,7 +344,6 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 </head>
 <body>
 
-<!-- Splash Screen -->
 <div class="splash" id="splash">
   <div class="splash-logo">🖨️</div>
   <div class="splash-title">مطبعة الأمير</div>
@@ -355,7 +353,6 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
   </button>
 </div>
 
-<!-- App Container -->
 <div class="app" id="app">
   <div class="topbar">
     <div class="brand">
@@ -372,7 +369,6 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
     </div>
   </div>
 
-  <!-- Projects View -->
   <div id="projectsView">
     <div class="empty-state" id="emptyState">
       <div class="empty-ico"><i class="bi bi-printer"></i></div>
@@ -391,7 +387,6 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
     </div>
   </div>
 
-  <!-- Editor View -->
   <div class="editor" id="editorView">
     <div class="editor-head">
       <div>
@@ -436,7 +431,6 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
   </div>
 </div>
 
-<!-- Bottom Bar -->
 <div class="bottom-bar" id="bottomBar">
   <button class="save" onclick="saveCurrentProject()" title="حفظ"><i class="bi bi-check-circle-fill"></i></button>
   <button class="print" onclick="openPrintWindow()" style="background: #2563eb;" title="طباعة">
@@ -444,12 +438,10 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
   </button>
 </div>
 
-<!-- Floating Print Button -->
 <button class="floating-print-btn" id="floatingPrintBtn" onclick="openPrintWindow()" title="طباعة">
   <i class="bi bi-printer-fill"></i>
 </button>
 
-<!-- New Project Modal -->
 <div class="modal" id="newProjectModal">
   <div class="modal-card">
     <div class="modal-head">
@@ -484,7 +476,6 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
   </div>
 </div>
 
-<!-- Type Editor Modal -->
 <div class="modal" id="typeEditorModal">
   <div class="modal-card">
     <div class="modal-head">
@@ -508,7 +499,6 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
   </div>
 </div>
 
-<!-- Settings Modal -->
 <div class="modal" id="settingsModal">
   <div class="modal-card">
     <div class="modal-head">
@@ -533,7 +523,6 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
   </div>
 </div>
 
-<!-- Crop Modal -->
 <div class="crop-modal" id="cropModal">
   <div class="crop-header">
     <div class="crop-title"><i class="bi bi-crop"></i> قص وتدوير الصورة</div>
@@ -614,7 +603,6 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
   </div>
 </div>
 
-<!-- Office Viewer -->
 <div class="office-viewer" id="officeViewer">
   <div class="office-viewer-head">
     <div class="office-viewer-title">
@@ -628,10 +616,8 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
   <div class="office-viewer-body" id="officeViewerBody"></div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- Hidden File Inputs -->
 <input type="file" id="fileInputFront" accept="image/*" style="display:none">
 <input type="file" id="fileInputBack" accept="image/*" style="display:none">
 <input type="file" id="officeFileInput" accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx" style="display:none">
@@ -647,8 +633,8 @@ let selectedPaper = 'A4';
 let pickerTarget = null;
 let currentEditingType = 'id';
 let dragSourceEl = null;
-const STORAGE_KEY = 'amir_press_projects_v7';
-const GLOBAL_SIZES_KEY = 'amir_press_global_sizes_v4';
+const STORAGE_KEY = 'amir_press_projects_v8';
+const GLOBAL_SIZES_KEY = 'amir_press_global_sizes_v5';
 
 const CROP_MIN_ZOOM = 0.1;
 const CROP_MAX_ZOOM = 5;
@@ -1113,6 +1099,7 @@ function handleFile(e){
     const pair = currentProject.ids.find(p=>p.id === pickerTarget.pairId);
     if(pair){
       pair[pickerTarget.side] = ev.target.result;
+      pair['final_' + pickerTarget.side] = null;
       if(!pair.crops) pair.crops = {};
       pair.crops[pickerTarget.side] = { x:0, y:0, zoom:1, rotate:0, quality:'high', box:null };
       persistProjects();
@@ -1126,7 +1113,7 @@ function handleFile(e){
 }
 
 /* ============================================================
-   CROP ENGINE
+   CROP ENGINE - FULL RESOLUTION OUTPUT
    ============================================================ */
 let cropState = null;
 let cropPointers = new Map();
@@ -1540,23 +1527,134 @@ function cancelCrop(){
   closeModal('cropModal');
 }
 
-function applyCrop(){
+/* ===== توليد صورة نهائية بأبعاد القالب بالضبط (بدون تشويه أو فراغات) ===== */
+function loadImageEl(src){
+  return new Promise((res, rej)=>{
+    const im = new Image();
+    im.crossOrigin = 'anonymous';
+    im.onload = ()=>res(im);
+    im.onerror = rej;
+    im.src = src;
+  });
+}
+
+async function renderFinalImage(pair, side, outW, outH){
+  const src = pair[side];
+  if(!src) return null;
+
+  const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1, rotate:0, quality:'high', box:null };
+  const rot = crop.rotate || 0;
+  const zoom = crop.zoom || 1;
+  const box = crop.box || { x:0, y:0, w:1, h:1 };
+  const q = crop.quality || 'high';
+
+  const img = await loadImageEl(src);
+  const iw = img.naturalWidth;
+  const ih = img.naturalHeight;
+
+  const W = Math.max(1, Math.round(outW));
+  const H = Math.max(1, Math.round(outH));
+
+  // canvas العمل: نرسم فيه الصورة كاملة بنفس تحويل المعاينة، لكن بأبعاد كبيرة للجودة
+  const QUALITY_FACTOR = 3;
+  const workW = W * QUALITY_FACTOR;
+  const workH = H * QUALITY_FACTOR;
+
+  const work = document.createElement('canvas');
+  work.width = workW;
+  work.height = workH;
+  const wctx = work.getContext('2d');
+  wctx.imageSmoothingEnabled = true;
+  wctx.imageSmoothingQuality = 'high';
+  wctx.fillStyle = '#ffffff';
+  wctx.fillRect(0, 0, workW, workH);
+
+  // نفس حساب المعاينة: baseW/baseH لتغطية viewport
+  const viewportRatio = workW / workH;
+  const imageRatio = iw / ih;
+  let baseW, baseH;
+  if(imageRatio > viewportRatio){
+    baseH = workH;
+    baseW = workH * imageRatio;
+  } else {
+    baseW = workW;
+    baseH = workW / imageRatio;
+  }
+
+  const bw = baseW * zoom;
+  const bh = baseH * zoom;
+
+  const cx = workW / 2;
+  const cy = workH / 2;
+
+  const panX = (crop.x / 100) * bw;
+  const panY = (crop.y / 100) * bh;
+
+  wctx.save();
+  wctx.translate(cx + panX, cy + panY);
+  wctx.rotate(rot * Math.PI / 180);
+  wctx.drawImage(img, -bw/2, -bh/2, bw, bh);
+  wctx.restore();
+
+  // قص الجزء (box) من work
+  const bx = Math.max(0, Math.min(1, box.x)) * workW;
+  const by = Math.max(0, Math.min(1, box.y)) * workH;
+  const bwBox = Math.max(1, Math.min(1 - box.x, box.w) * workW);
+  const bhBox = Math.max(1, Math.min(1 - box.y, box.h) * workH);
+
+  // canvas نهائي بأبعاد القالب
+  const final = document.createElement('canvas');
+  final.width = W;
+  final.height = H;
+  const fctx = final.getContext('2d');
+  fctx.imageSmoothingEnabled = true;
+  fctx.imageSmoothingQuality = 'high';
+  fctx.fillStyle = '#ffffff';
+  fctx.fillRect(0, 0, W, H);
+  if('filter' in fctx) fctx.filter = getQualityFilter(q);
+  fctx.drawImage(work, bx, by, bwBox, bhBox, 0, 0, W, H);
+
+  return final.toDataURL('image/png');
+}
+
+async function applyCrop(){
   if(!cropState) return;
   const pair = currentProject.ids.find(p=>p.id === cropState.pairId);
-  if(pair){
-    if(!pair.crops) pair.crops = {};
-    pair.crops[cropState.side] = {
-      x: cropState.x, y: cropState.y,
-      zoom: cropState.zoom,
-      rotate: cropState.rotate,
-      quality: cropState.quality,
-      box: cropState.box ? { ...cropState.box } : null
-    };
-    persistProjects();
-    renderTypeItems();
-    renderLivePreview();
-    showToast('تم تطبيق القص والتدوير','✂️');
+  if(!pair){ cancelCrop(); return; }
+
+  const size = getEffectiveSize(pair.template);
+  // دقة الطباعة: 120 بكسل/سم ≈ 305 DPI
+  const targetW = Math.max(80, Math.round(size.w * 120));
+  const targetH = Math.max(80, Math.round(size.h * 120));
+
+  // احفظ بيانات القص
+  if(!pair.crops) pair.crops = {};
+  pair.crops[cropState.side] = {
+    x: cropState.x, y: cropState.y,
+    zoom: cropState.zoom,
+    rotate: cropState.rotate,
+    quality: cropState.quality,
+    box: cropState.box ? { ...cropState.box } : null
+  };
+
+  const side = cropState.side;
+
+  try{
+    const dataUrl = await renderFinalImage(pair, side, targetW, targetH);
+    if(dataUrl){
+      pair['final_' + side] = dataUrl;
+    }
+  }catch(err){
+    console.error('فشل توليد الصورة النهائية', err);
+    showToast('تعذّر معالجة الصورة', '⚠️');
+    return;
   }
+
+  persistProjects();
+  renderTypeItems();
+  renderLivePreview();
+  showToast('تم القص بأبعاد القالب بدقة ✅','✂️');
+
   cropState = null;
   cropDrag = null; cropPinch = null; cropBoxDrag = null;
   cropPointers.clear();
@@ -1630,7 +1728,7 @@ function previewTypeSize(typeKey){
   }
 }
 
-function applyTypeSize(typeKey){
+async function applyTypeSize(typeKey){
   if(!currentProject) return;
   const wInput = $('input-w-' + typeKey);
   const hInput = $('input-h-' + typeKey);
@@ -1689,24 +1787,15 @@ function getSortedItems(){
 }
 
 function buildCroppedImageHTML(pair, side){
+  // استخدم الصورة النهائية إن وُجدت
+  const finalKey = 'final_' + side;
+  if(pair[finalKey]){
+    return `<div class="cropped-img-wrap"><img src="${pair[finalKey]}" alt=""></div>`;
+  }
+  // احتياطي: الصورة الأصلية مع object-fit:cover لملء القالب
   const img = pair[side];
   if(!img) return '';
-  const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1, rotate:0, quality:'high', box:null };
-  const rot = crop.rotate || 0;
-  const q = crop.quality || 'high';
-
-  let clipPath = 'none';
-  if(crop.box && (crop.box.w < 0.999 || crop.box.h < 0.999 || crop.box.x > 0.001 || crop.box.y > 0.001)){
-    const bx = (crop.box.x * 100).toFixed(3);
-    const by = (crop.box.y * 100).toFixed(3);
-    const bw = (crop.box.w * 100).toFixed(3);
-    const bh = (crop.box.h * 100).toFixed(3);
-    clipPath = `inset(${by}% ${(100 - parseFloat(bx) - parseFloat(bw)).toFixed(3)}% ${(100 - parseFloat(by) - parseFloat(bh)).toFixed(3)}% ${bx}%)`;
-  }
-
-  return `<div class="cropped-img-wrap" style="clip-path:${clipPath};">
-    <img src="${img}" style="position:absolute; top:50%; left:50%; width:100%; height:100%; object-fit:contain; transform: translate(-50%, -50%) translate(${crop.x}%, ${crop.y}%) rotate(${rot}deg) scale(${crop.zoom}); filter:${getQualityFilter(q)};">
-  </div>`;
+  return `<div class="cropped-img-wrap"><img src="${img}" alt="" style="object-fit:cover"></div>`;
 }
 
 function buildSheetHTML(editable){
@@ -2085,7 +2174,6 @@ function updateCopyCount(){
   showToast(`عدد النسخ: ${currentProject.copyCount}`, '📄');
 }
 
-// ★★★ الطباعة مع عدد النسخ وبدون تكرار ★★★
 function openPrintWindow(){
   if(!currentProject){ showToast('افتح مشروعاً أولاً','⚠️'); return; }
   if(!currentProject.ids.length){ showToast('أضف عنصراً واحداً على الأقل','⚠️'); return; }
@@ -2106,7 +2194,6 @@ function openPrintWindow(){
   const tempProject = { ...currentProject, ids: nonOfficeItems };
   const paperHtml = buildSheetHTMLForProject(tempProject, false);
   
-  // بناء الصفحات المتكررة (عدد النسخ)
   let pagesHtml = '';
   for(let i = 0; i < copyCount; i++){
     pagesHtml += `<div class="print-page" style="page-break-after: always; display: flex; align-items: center; justify-content: center;">
@@ -2127,10 +2214,10 @@ function openPrintWindow(){
   printOverlay.innerHTML = `
     <div style="position: sticky; top: 0; width: 100%; background: #fff; padding: 15px; display: flex; justify-content: center; gap: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 10001;">
       <button onclick="window.print()" style="padding: 15px 40px; border-radius: 12px; border: none; background: #2563eb; color: white; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(37,99,235,0.4); display: flex; align-items: center; gap: 8px;">
-        <i class="bi bi-printer-fill"></i> 
+        <i class="bi bi-printer-fill"></i> تنفيذ الطباعة الآن
       </button>
       <button onclick="document.getElementById('customPrintOverlay').remove()" style="padding: 15px 30px; border-radius: 12px; border: none; background: #ef4444; color: white; font-size: 16px; font-weight: bold; cursor: pointer;">
-        ✕ 
+        ✕ إلغاء
       </button>
     </div>
     <div id="printPreviewArea" style="background: #fff; margin: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.3); width: ${p.w}mm; min-height: ${p.h}mm; box-sizing: border-box;">
