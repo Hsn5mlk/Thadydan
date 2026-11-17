@@ -128,21 +128,21 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .sheet-item:last-child{margin-bottom:0}
 .sheet-item.dragging{opacity:.4;cursor:grabbing;transform:scale(.98)}
 .sheet-item.drag-over{outline:2px dashed var(--gold);outline-offset:4px;background:rgba(200,164,92,.05)}
-.sheet-item-pair{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.sheet-item-pair{display:flex;flex-wrap:wrap;gap:6px} /* تعديل: flex بدل grid */
 .sheet-photos-grid{display:grid;gap:6px}
 .sheet-photos-grid.photos-4{grid-template-columns:repeat(2,1fr)}
 .sheet-photos-grid.photos-6{grid-template-columns:repeat(2,1fr)}
 .sheet-photos-grid.photos-9{grid-template-columns:repeat(3,1fr)}
-.s-img{width:100%;background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;border:none;position:relative}
-.s-img img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .1s}
+
+.s-img{background:#fff;display:block;overflow:hidden;border:none;position:relative} /* تعديل: إزالة العرض الافتراضي */
 .s-img.blank{background:#fff}
 .s-img.hidden-card{background:#fff !important;border:none}
 .full-image-wrap{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.full-image-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+.full-image-wrap img{width:100%;height:100%;object-fit:contain;display:block}
 .drag-handle{position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:6px;background:rgba(15,23,42,.7);color:#fff;font-size:11px;display:none;align-items:center;justify-content:center;z-index:10;cursor:grab;pointer-events:auto}
 .sheet-item:hover .drag-handle{display:flex}
 
-.cropped-img-wrap{position:relative;width:100%;height:100%;overflow:hidden;display:flex;align-items:center;justify-content:center;border-radius:2px}
+.cropped-img-wrap{position:absolute;inset:0;width:100%;height:100%;overflow:hidden;border-radius:2px}
 .cropped-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;backface-visibility:hidden;transform-origin:center center}
 
 .print-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
@@ -223,13 +223,11 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .crop-actions .apply{background:linear-gradient(135deg,#22c55e,#15803d);color:#fff;box-shadow:0 4px 14px rgba(34,197,94,.4)}
 .crop-body{flex:1;display:flex;align-items:center;justify-content:center;padding:16px;overflow:hidden;position:relative}
 
-/* Crop viewport */
-.crop-viewport{position:relative;background:#111;border:2px solid var(--gold);border-radius:12px;box-shadow:0 0 60px rgba(200,164,92,.4);overflow:hidden;cursor:grab;touch-action:none;max-width:100%;max-height:100%}
+.crop-viewport{position:relative;background:#111;border:2px solid var(--gold);border-radius:12px;box-shadow:0 0 60px rgba(200,164,92,.4);overflow:visible;cursor:grab;touch-action:none;max-width:100%;max-height:100%}
 .crop-viewport.dragging{cursor:grabbing}
-.crop-image-layer{position:absolute;inset:0;overflow:hidden;border-radius:8px}
+.crop-image-layer{position:absolute;inset:0;overflow:hidden;border-radius:10px}
 .crop-image-layer img{position:absolute;top:0;left:0;user-select:none;pointer-events:none;transform-origin:center center;max-width:none;max-height:none;will-change:transform}
 
-/* Crop box */
 .crop-box{position:absolute;border:2px dashed #fff;box-shadow:0 0 0 1px rgba(0,0,0,.5);z-index:4;pointer-events:auto;touch-action:none;box-sizing:border-box}
 .crop-box::before{content:"";position:absolute;inset:0;pointer-events:none;border:1px solid rgba(255,255,255,.3)}
 .crop-box::after{content:"";position:absolute;inset:-9999px;background:rgba(0,0,0,.55);pointer-events:none;z-index:-1}
@@ -277,6 +275,13 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .crop-quality-panel .qc-opt:hover{border-color:var(--gold);background:rgba(200,164,92,.05)}
 .crop-quality-panel .qc-opt.active{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;border-color:var(--gold2);box-shadow:0 2px 8px rgba(200,164,92,.4)}
 
+/* Size editor modal */
+.size-editor-preview{display:flex;align-items:center;justify-content:center;background:#f8fafc;border:1.5px dashed var(--gold);border-radius:12px;padding:16px;min-height:120px}
+.size-editor-preview .sp-box{background:linear-gradient(135deg,rgba(200,164,92,.2),rgba(200,164,92,.1));border:2px solid var(--gold);border-radius:6px;display:flex;align-items:center;justify-content:center;color:var(--gold2);font-weight:900;font-size:11px;transition:.15s;text-align:center;padding:4px}
+.size-quick-btns{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
+.size-quick-btns button{padding:9px 4px;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:11px;font-weight:900;cursor:pointer;color:var(--ink);font-family:inherit}
+.size-quick-btns button:active{transform:scale(.95)}
+
 /* Office viewer modal */
 .office-viewer{position:fixed;inset:0;background:rgba(15,23,42,.97);backdrop-filter:blur(6px);display:none;z-index:400;flex-direction:column}
 .office-viewer.on{display:flex}
@@ -299,27 +304,9 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
 .bottom-bar .print{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#fff;box-shadow:0 6px 20px rgba(200,164,92,.4)}
 
 /* Floating Print Button */
-.floating-print-btn {
-  position: fixed;
-  bottom: 90px;
-  left: 20px;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #2563eb, #1e40af);
-  color: white;
-  border: none;
-  box-shadow: 0 8px 24px rgba(37,99,235,.5);
-  z-index: 999;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  cursor: pointer;
-  transition: transform 0.2s;
-}
-.floating-print-btn:active { transform: scale(0.9); }
-.floating-print-btn.on { display: flex; }
+.floating-print-btn{position:fixed;bottom:90px;left:20px;width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#2563eb,#1e40af);color:white;border:none;box-shadow:0 8px 24px rgba(37,99,235,.5);z-index:999;display:none;align-items:center;justify-content:center;font-size:24px;cursor:pointer;transition:transform 0.2s}
+.floating-print-btn:active{transform:scale(0.9)}
+.floating-print-btn.on{display:flex}
 
 @media(max-width:520px){
   .type-icons-row{grid-template-columns:repeat(3,1fr)}
@@ -439,7 +426,6 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
   </button>
 </div>
 
-<!-- Floating Print Button -->
 <button class="floating-print-btn" id="floatingPrintBtn" onclick="openPrintWindow()" title="طباعة">
   <i class="bi bi-printer-fill"></i>
 </button>
@@ -513,7 +499,7 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
     <div class="modal-body">
       <div style="background:linear-gradient(135deg,rgba(34,197,94,.1),rgba(34,197,94,.03));border:1px solid rgba(34,197,94,.3);border-radius:12px;padding:11px 13px;font-size:11px;color:#15803d;margin-bottom:16px;display:flex;align-items:flex-start;gap:8px">
         <i class="bi bi-info-circle-fill" style="font-size:14px;flex-shrink:0;margin-top:1px"></i>
-        <div>كل قسم له أبعاده الخاصة. اكتب القيم ثم اضغط <b>حفظ</b>. تُطبَّق فوراً على الورقة والطباعة فقط (وليس على بطاقات نافذة الإضافة)، وتُحفظ كافتراضي للقسم للمشاريع القادمة. القيم من <b>0.1</b> إلى <b>50</b> سم.</div>
+        <div>كل قسم له أبعاده الخاصة. اكتب القيم وسيتم <b>تطبيقها فوراً</b> على الورقة والطباعة. القيم من <b>0.1</b> إلى <b>50</b> سم.</div>
       </div>
 
       <div id="settingsContainer"></div>
@@ -521,6 +507,88 @@ body{background:var(--bg);color:var(--ink);overscroll-behavior:none}
       <button class="btn-main" onclick="resetSettingsDefaults()" style="background:rgba(239,68,68,.12);color:#ef4444;box-shadow:none;margin-top:8px">
         <i class="bi bi-arrow-counterclockwise"></i> استعادة كل الأبعاد الافتراضية
       </button>
+    </div>
+  </div>
+</div>
+
+<!-- نافذة تعديل القياس -->
+<div class="modal" id="sizeEditorModal">
+  <div class="modal-card" style="max-width:420px">
+    <div class="modal-head">
+      <div class="modal-title">
+        <i class="bi bi-aspect-ratio-fill"></i>
+        <span id="sizeEditorTitle">تعديل قياس القالب</span>
+      </div>
+      <button class="modal-close" onclick="closeModal('sizeEditorModal')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <div style="background:rgba(200,164,92,.08);border:1px solid rgba(200,164,92,.3);border-radius:10px;padding:10px 12px;font-size:11px;color:var(--gold2);margin-bottom:14px;display:flex;gap:6px">
+        <i class="bi bi-info-circle-fill" style="margin-top:1px"></i>
+        <span>عدّل الطول والعرض بحرية — يُحدّث القالب فوراً على ورقة العمل.</span>
+      </div>
+
+      <div class="size-editor-preview" id="sizeEditorPreview"></div>
+
+      <div class="settings-inputs-row" style="margin-top:14px">
+        <div class="settings-input-group">
+          <label><i class="bi bi-arrows-expand-vertical"></i> الطول (سم)</label>
+          <div class="settings-input-wrapper">
+            <input type="number" id="sizeEdH" min="0.1" max="50" step="0.1" oninput="previewSizeEditor()">
+            <span class="unit">سم</span>
+          </div>
+        </div>
+        <div class="settings-input-group">
+          <label><i class="bi bi-arrows-expand"></i> العرض (سم)</label>
+          <div class="settings-input-wrapper">
+            <input type="number" id="sizeEdW" min="0.1" max="50" step="0.1" oninput="previewSizeEditor()">
+            <span class="unit">سم</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="size-quick-btns">
+        <button onclick="quickSize(0,-0.1)">➖ طول</button>
+        <button onclick="quickSize(0,0.1)">➕ طول</button>
+        <button onclick="quickSize(-0.1,0)">➖ عرض</button>
+        <button onclick="quickSize(0.1,0)">➕ عرض</button>
+      </div>
+
+      <button class="btn-main" style="margin-top:12px" onclick="applySizeEditor()">
+        <i class="bi bi-check-circle-fill"></i> اعتماد القياسات
+      </button>
+      <button class="btn-main" style="margin-top:8px;background:linear-gradient(135deg,#2563eb,#1e40af);box-shadow:0 6px 18px rgba(37,99,235,.4)" onclick="openCropFromSizeEditor()">
+        <i class="bi bi-crop"></i> قص وتعديل الجودة
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- نافذة خيارات الصورة -->
+<div class="modal" id="imageOptionsModal">
+  <div class="modal-card" style="max-width:380px">
+    <div class="modal-head">
+      <div class="modal-title">
+        <i class="bi bi-image-fill"></i>
+        <span id="imgOptTitle">خيارات الصورة</span>
+      </div>
+      <button class="modal-close" onclick="closeModal('imageOptionsModal')"><i class="bi bi-x-lg"></i></button>
+    </div>
+    <div class="modal-body">
+      <div id="imgOptPreview" style="width:100%;aspect-ratio:1.75/1;background:#f1f5f9;border-radius:12px;overflow:hidden;margin-bottom:14px;display:flex;align-items:center;justify-content:center;border:1.5px solid var(--border)"></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button class="btn-main" style="background:linear-gradient(135deg,#c8a45c,#a17c3a)" onclick="imgOptAction('crop')">
+          <i class="bi bi-crop"></i> قص وتدوير
+        </button>
+        <button class="btn-main" style="background:linear-gradient(135deg,#2563eb,#1e40af);box-shadow:0 6px 18px rgba(37,99,235,.4)" onclick="imgOptAction('size')">
+          <i class="bi bi-aspect-ratio-fill"></i> تعديل قياس القالب
+        </button>
+        <button class="btn-main" style="background:linear-gradient(135deg,#22c55e,#15803d);box-shadow:0 6px 18px rgba(34,197,94,.4)" onclick="imgOptAction('replace')">
+          <i class="bi bi-arrow-repeat"></i> تغيير الصورة
+        </button>
+        <button class="btn-main" style="background:rgba(239,68,68,.12);color:#ef4444;box-shadow:none" onclick="imgOptAction('hide')">
+          <i class="bi bi-eye-slash-fill"></i> <span id="imgOptHideLabel">إخفاء الصورة</span>
+        </button>
+      </div>
     </div>
   </div>
 </div>
@@ -635,8 +703,8 @@ let selectedPaper = 'A4';
 let pickerTarget = null;
 let currentEditingType = 'id';
 let dragSourceEl = null;
-const STORAGE_KEY = 'amir_press_projects_v8';
-const GLOBAL_SIZES_KEY = 'amir_press_global_sizes_v5';
+const STORAGE_KEY = 'amir_press_projects_v15_freeflow';
+const GLOBAL_SIZES_KEY = 'amir_press_global_sizes_v15_freeflow';
 
 const CROP_MIN_ZOOM = 0.1;
 const CROP_MAX_ZOOM = 5;
@@ -646,14 +714,18 @@ const PAIR_GAP_PX = 6;
 const PHOTO_GAP_PX = 6;
 const ITEM_GAP_PX = 6;
 
-/* ★★★ القياسات القديمة كما هي — لم تلمس ★★★ */
+/* 
+  ★ التعديل الجذري ★
+  w = المسافة الأفقية (الطول في سياقك)
+  h = المسافة العمودية (الارتفاع)
+*/
 const DEFAULT_SIZES = {
-  id:        { w: 5.0, h: 2.8 },
-  residency: { w: 8.5,  h: 5.5 },
-  passport:  { w: 8.8,  h: 12.5 },
-  photos:    { w: 1.5,  h: 2.5 },
-  full:      { w: 0,    h: 0 },
-  office:    { w: 0,    h: 0 }
+  id:        { w: 3.5, h: 2.0 },
+  residency: { w: 8.5, h: 5.5 },
+  passport:  { w: 8.8, h: 12.5 },
+  photos:    { w: 1.5, h: 2.5 },
+  full:      { w: 0,   h: 0 },
+  office:    { w: 0,   h: 0 }
 };
 
 let GLOBAL_SIZES = JSON.parse(JSON.stringify(DEFAULT_SIZES));
@@ -833,7 +905,7 @@ function getEffectiveSize(key){
 
 function getCardSize(key){
   if(DEFAULT_SIZES[key]) return { w: DEFAULT_SIZES[key].w, h: DEFAULT_SIZES[key].h };
-  return { w: 5.0, h: 2.8 };
+  return { w: 3.5, h: 2.0 };
 }
 
 function renderTypeIconsRow(){
@@ -844,6 +916,7 @@ function renderTypeIconsRow(){
     const count = currentProject.ids.filter(it => it.template === k).length;
     const size = getEffectiveSize(k);
     let dimText = 'كامل';
+    /* عرض القياسات: الطول × العرض (حيث w هو الطول) */
     if(tpl.kind !== 'full' && tpl.kind !== 'office') dimText = `${size.w}×${size.h}`;
     if(tpl.kind === 'office') dimText = 'ملفات';
     return `
@@ -893,7 +966,7 @@ function renderTypeItems(){
   }
 
   if(tpl.kind === 'office'){
-    cont.innerHTML = items.map((item, idx)=>{
+    cont.innerHTML = items.map((item)=>{
       const name = item.fileName || 'ملف';
       const size = item.fileSize ? formatBytes(item.fileSize) : '';
       const type = item.fileType || '';
@@ -938,6 +1011,8 @@ function renderCard(pair, side, label, icon, size){
   const img = pair[side];
   const isHidden = !!pair['hide' + (side==='front'?'Front':'Back')];
   const showActions = !!img || isHidden;
+  
+  /* عرض القياسات: العرض الأصلي (w) والطول (h) */
   const aspect = size.w > 0 ? `${size.w} / ${size.h}` : '210 / 297';
   
   let innerHTML = '';
@@ -952,7 +1027,7 @@ function renderCard(pair, side, label, icon, size){
       <div class="id-card-label"><i class="bi ${icon}"></i> ${label}</div>
       <div class="id-card-img ${img ? '' : 'empty'} ${isHidden ? 'hidden-card' : ''}"
            style="aspect-ratio:${aspect}"
-           onclick="pickImage('${pair.id}','${side}')">
+           onclick="handleCardClick(event,'${pair.id}','${side}')">
         ${ innerHTML }
       </div>
       ${ showActions ? `
@@ -966,6 +1041,45 @@ function renderCard(pair, side, label, icon, size){
         </div>` : '' }
     </div>
   `;
+}
+
+function handleCardClick(e, pairId, side){
+  if(e.target.closest('button')) return;
+  const pair = currentProject.ids.find(p=>p.id === pairId);
+  if(!pair) return;
+  if(!pair[side]){
+    pickImage(pairId, side);
+    return;
+  }
+  openImageOptions(pairId, side);
+}
+
+let imageOptCtx = null;
+function openImageOptions(pairId, side){
+  const pair = currentProject.ids.find(p=>p.id === pairId);
+  if(!pair) return;
+  imageOptCtx = { pairId, side };
+  const tpl = TEMPLATES[pair.template];
+  const sideLabel = side === 'front' ? 'الوجه' : 'الظهر';
+  $('imgOptTitle').textContent = `${tpl.name} - ${sideLabel}`;
+  const preview = $('imgOptPreview');
+  const finalKey = 'final_' + side;
+  const src = pair[finalKey] || pair[side];
+  preview.innerHTML = `<img src="${src}" style="width:100%;height:100%;object-fit:cover">`;
+  const isHidden = !!pair['hide' + (side==='front'?'Front':'Back')];
+  $('imgOptHideLabel').textContent = isHidden ? 'إظهار الصورة' : 'إخفاء الصورة';
+  openModal('imageOptionsModal');
+}
+function imgOptAction(action){
+  if(!imageOptCtx) return;
+  const { pairId, side } = imageOptCtx;
+  closeModal('imageOptionsModal');
+  setTimeout(()=>{
+    if(action === 'crop') openCrop(pairId, side);
+    else if(action === 'size') openSizeEditor(pairId, side);
+    else if(action === 'replace') pickImage(pairId, side);
+    else if(action === 'hide') toggleHide(pairId, side);
+  }, 150);
 }
 
 function getQualityFilter(q){
@@ -1102,7 +1216,7 @@ function handleFile(e){
     const pair = currentProject.ids.find(p=>p.id === pickerTarget.pairId);
     if(pair){
       pair[pickerTarget.side] = ev.target.result;
-      pair['final_' + pickerTarget.side] = null; // مسح الصورة النهائية القديمة
+      pair['final_' + pickerTarget.side] = null;
       if(!pair.crops) pair.crops = {};
       pair.crops[pickerTarget.side] = { x:0, y:0, zoom:1, rotate:0, quality:'high', box:null };
       persistProjects();
@@ -1115,15 +1229,80 @@ function handleFile(e){
   reader.readAsDataURL(file);
 }
 
-/* ============================================================
-   ★★★ CROP ENGINE المطور — قص بدقة عالية عبر Canvas ★★★
-   - الصورة كاملة تظهر في نافذة القص (contain)
-   - المعتم خارج مربع التحديد واضح
-   - عند التطبيق: نرسم النتيجة النهائية على canvas بدقة عالية
-     بأبعاد القالب بالضبط (بدون تشويه، بدون فراغات)
-   - نحفظ الناتج في pair.final_front/final_back
-   - العرض يستخدم final_ مباشرة → دقة مضمونة
-================================================================ */
+/* ============ نافذة تعديل القياس ============ */
+let sizeEditorCtx = null;
+
+function openSizeEditor(pairId, side){
+  const pair = currentProject.ids.find(p=>p.id === pairId);
+  if(!pair) return;
+  const tpl = TEMPLATES[pair.template];
+  const sz = getEffectiveSize(pair.template);
+  sizeEditorCtx = { pairId, side, template: pair.template };
+  $('sizeEditorTitle').textContent = `قياس ${tpl.name}`;
+  $('sizeEdH').value = sz.h; /* ارتفاع */
+  $('sizeEdW').value = sz.w; /* طول */
+  previewSizeEditor();
+  openModal('sizeEditorModal');
+}
+
+function previewSizeEditor(){
+  if(!sizeEditorCtx) return;
+  const w = parseFloat($('sizeEdW').value) || 0.1; /* الطول */
+  const h = parseFloat($('sizeEdH').value) || 0.1; /* الارتفاع */
+  const pv = $('sizeEditorPreview');
+  const maxW = 180, maxH = 180;
+  const ratio = w / h;
+  let pw, ph;
+  if(ratio > 1){ pw = maxW; ph = maxW / ratio; }
+  else { ph = maxH; pw = maxH * ratio; }
+  
+  /* عرض القياسات: الطول × العرض */
+  pv.innerHTML = `<div class="sp-box" style="width:${pw}px;height:${ph}px">${w.toFixed(1)} × ${h.toFixed(1)} سم</div>`;
+}
+
+function quickSize(dw, dh){
+  const w = (parseFloat($('sizeEdW').value) || 1) + dw; /* الطول */
+  const h = (parseFloat($('sizeEdH').value) || 1) + dh; /* الارتفاع */
+  $('sizeEdW').value = Math.max(0.1, Math.min(50, w)).toFixed(2);
+  $('sizeEdH').value = Math.max(0.1, Math.min(50, h)).toFixed(2);
+  previewSizeEditor();
+}
+
+function applySizeEditor(){
+  if(!sizeEditorCtx) return;
+  const w = parseFloat($('sizeEdW').value); /* الطول */
+  const h = parseFloat($('sizeEdH').value); /* الارتفاع */
+  if(!w || !h || w < 0.1 || h < 0.1 || w > 50 || h > 50){
+    showToast('قيمة غير صحيحة (0.1 - 50 سم)', '⚠️');
+    return;
+  }
+  const key = sizeEditorCtx.template;
+  if(!currentProject.sizes) currentProject.sizes = {};
+  if(!GLOBAL_SIZES[key]) GLOBAL_SIZES[key] = {};
+  currentProject.sizes[key] = { w, h };
+  GLOBAL_SIZES[key] = { w, h };
+  currentProject.ids.forEach(it=>{
+    if(it.template === key){
+      it.final_front = null;
+      it.final_back = null;
+    }
+  });
+  saveGlobalSizes();
+  persistProjects();
+  renderTypeIconsRow();
+  renderLivePreview();
+  closeModal('sizeEditorModal');
+  showToast(`✅ تم تحديث القياس: ${w}×${h} سم`, '✅');
+}
+
+function openCropFromSizeEditor(){
+  if(!sizeEditorCtx) return;
+  const { pairId, side } = sizeEditorCtx;
+  closeModal('sizeEditorModal');
+  setTimeout(()=>openCrop(pairId, side), 150);
+}
+
+/* ============ نظام القص ============ */
 let cropState = null;
 let cropPointers = new Map();
 let cropDrag = null;
@@ -1141,7 +1320,7 @@ function openCrop(pairId, side){
 
   const imgSrc = pair[side];
   const size = getEffectiveSize(pair.template);
-  const aspect = size.w / size.h;
+  const aspect = size.w / size.h; /* العرض / الارتفاع */
   const crop = (pair.crops && pair.crops[side]) || { x:0, y:0, zoom:1, rotate:0, quality:'high', box:null };
 
   cropState = {
@@ -1184,12 +1363,12 @@ function openCrop(pairId, side){
     cropState.vh = vh;
 
     if(!cropState.box){
-      cropState.box = { x: 0, y: 0, w: 1, h: 1 };
+      cropState.box = { x: 0.1, y: 0.1, w: 0.8, h: 0.8 };
     } else {
-      cropState.box.x = Math.max(0, Math.min(cropState.box.x, 1 - 0.05));
-      cropState.box.y = Math.max(0, Math.min(cropState.box.y, 1 - 0.05));
-      cropState.box.w = Math.max(0.05, Math.min(cropState.box.w, 1 - cropState.box.x));
-      cropState.box.h = Math.max(0.05, Math.min(cropState.box.h, 1 - cropState.box.y));
+      cropState.box.x = Math.max(0, Math.min(cropState.box.x, 1 - 0.1));
+      cropState.box.y = Math.max(0, Math.min(cropState.box.y, 1 - 0.1));
+      cropState.box.w = Math.max(0.1, Math.min(cropState.box.w, 1 - cropState.box.x));
+      cropState.box.h = Math.max(0.1, Math.min(cropState.box.h, 1 - cropState.box.y));
     }
 
     updateCropBoxPosition();
@@ -1206,7 +1385,7 @@ function openCrop(pairId, side){
     b.classList.toggle('active', b.dataset.q === cropState.quality);
   });
 
-  setCropMode('pan');
+  setCropMode('box');
   applyQualityToImage();
   openModal('cropModal');
   setupCropInteractions();
@@ -1388,7 +1567,6 @@ function setupCropInteractions(){
   };
   vp.onpointerup = endPointer;
   vp.onpointercancel = endPointer;
-  vp.onpointerleave = endPointer;
 
   vp.onwheel = (e)=>{
     if(!cropState) return;
@@ -1514,7 +1692,7 @@ $('cropRotate').addEventListener('input', (e)=>{
 function resetCropAll(){
   if(!cropState) return;
   cropState.x = 0; cropState.y = 0; cropState.zoom = 1; cropState.rotate = 0;
-  cropState.box = { x: 0, y: 0, w: 1, h: 1 };
+  cropState.box = { x: 0.1, y: 0.1, w: 0.8, h: 0.8 };
   $('cropZoom').value = 1;
   $('cropZoomVal').textContent = '1.00x';
   $('cropRotate').value = 0;
@@ -1536,7 +1714,6 @@ function cancelCrop(){
   closeModal('cropModal');
 }
 
-/* ★★★ رسم الصورة النهائية على Canvas بأبعاد القالب بدقة عالية ★★★ */
 function loadImageEl(src){
   return new Promise((res, rej)=>{
     const im = new Image();
@@ -1564,8 +1741,7 @@ async function renderFinalImage(pair, side, outW, outH){
   const W = Math.max(1, Math.round(outW));
   const H = Math.max(1, Math.round(outH));
 
-  /* نعمل بدقة 3x ثم نصغّر → جودة فائقة */
-  const QUALITY_FACTOR = 3;
+  const QUALITY_FACTOR = 4;
   const workW = W * QUALITY_FACTOR;
   const workH = H * QUALITY_FACTOR;
 
@@ -1591,23 +1767,21 @@ async function renderFinalImage(pair, side, outW, outH){
 
   const bw = baseW * zoom;
   const bh = baseH * zoom;
-
   const cx = workW / 2;
   const cy = workH / 2;
-
   const panX = (crop.x / 100) * bw;
   const panY = (crop.y / 100) * bh;
 
   wctx.save();
   wctx.translate(cx + panX, cy + panY);
   wctx.rotate(rot * Math.PI / 180);
-  wctx.drawImage(img, -bw/2, -bh/2, bw, bh);
+  wctx.drawImage(img, -bw / 2, -bh / 2, bw, bh);
   wctx.restore();
 
-  const bx = Math.max(0, Math.min(1, box.x)) * workW;
-  const by = Math.max(0, Math.min(1, box.y)) * workH;
-  const bwBox = Math.max(1, Math.min(1 - box.x, box.w) * workW);
-  const bhBox = Math.max(1, Math.min(1 - box.y, box.h) * workH);
+  const sx = Math.max(0, Math.min(1, box.x)) * workW;
+  const sy = Math.max(0, Math.min(1, box.y)) * workH;
+  const sw = Math.max(1, Math.min(1 - box.x, box.w) * workW);
+  const sh = Math.max(1, Math.min(1 - box.y, box.h) * workH);
 
   const final = document.createElement('canvas');
   final.width = W;
@@ -1618,7 +1792,7 @@ async function renderFinalImage(pair, side, outW, outH){
   fctx.fillStyle = '#ffffff';
   fctx.fillRect(0, 0, W, H);
   if('filter' in fctx) fctx.filter = getQualityFilter(q);
-  fctx.drawImage(work, bx, by, bwBox, bhBox, 0, 0, W, H);
+  fctx.drawImage(work, sx, sy, sw, sh, 0, 0, W, H);
 
   return final.toDataURL('image/png');
 }
@@ -1629,9 +1803,8 @@ async function applyCrop(){
   if(!pair){ cancelCrop(); return; }
 
   const size = getEffectiveSize(pair.template);
-  /* دقة الطباعة: 120 بكسل/سم ≈ 305 DPI */
-  const targetW = Math.max(80, Math.round(size.w * 120));
-  const targetH = Math.max(80, Math.round(size.h * 120));
+  const targetW = Math.max(200, Math.round(size.w * 300 / 2.54));
+  const targetH = Math.max(200, Math.round(size.h * 300 / 2.54));
 
   if(!pair.crops) pair.crops = {};
   pair.crops[cropState.side] = {
@@ -1658,7 +1831,7 @@ async function applyCrop(){
   persistProjects();
   renderTypeItems();
   renderLivePreview();
-  showToast('تم القص بأبعاد القالب بدقة ✅','✂️');
+  showToast('✅ تم القص بأبعاد القالب بدقة عالية','✂️');
 
   cropState = null;
   cropDrag = null; cropPinch = null; cropBoxDrag = null;
@@ -1694,14 +1867,14 @@ function renderSettingsContent(){
         </div>
         <div class="settings-inputs-row">
           <div class="settings-input-group">
-            <label><i class="bi bi-arrows-expand-vertical"></i> العرض</label>
+            <label><i class="bi bi-arrows-expand-vertical"></i> الطول</label>
             <div class="settings-input-wrapper">
               <input type="number" id="input-w-${k}" value="${size.w}" min="0.1" max="50" step="0.01" placeholder="${DEFAULT_SIZES[k].w}" oninput="previewTypeSize('${k}')">
               <span class="unit">سم</span>
             </div>
           </div>
           <div class="settings-input-group">
-            <label><i class="bi bi-arrows-expand"></i> الارتفاع</label>
+            <label><i class="bi bi-arrows-expand"></i> العرض</label>
             <div class="settings-input-wrapper">
               <input type="number" id="input-h-${k}" value="${size.h}" min="0.1" max="50" step="0.01" placeholder="${DEFAULT_SIZES[k].h}" oninput="previewTypeSize('${k}')">
               <span class="unit">سم</span>
@@ -1723,19 +1896,48 @@ function previewTypeSize(typeKey){
   const hInput = $('input-h-' + typeKey);
   const tag = $('sth-current-' + typeKey);
   if(!wInput || !hInput || !tag) return;
-  const w = parseFloat(wInput.value);
-  const h = parseFloat(hInput.value);
+  const w = parseFloat(wInput.value); /* الطول */
+  const h = parseFloat(hInput.value); /* العرض */
   if(w > 0 && h > 0){
     tag.textContent = `${w.toFixed(2).replace(/\.?0+$/,'')}×${h.toFixed(2).replace(/\.?0+$/,'')} سم`;
   }
+  autoApplyTypeSize(typeKey);
+}
+
+function autoApplyTypeSize(typeKey){
+  if(!currentProject) return;
+  const wInput = $('input-w-' + typeKey);
+  const hInput = $('input-h-' + typeKey);
+  if(!wInput || !hInput) return;
+  const w = parseFloat(wInput.value); /* الطول */
+  const h = parseFloat(hInput.value); /* العرض */
+  if(!w || !h || w < 0.1 || h < 0.1 || w > 50 || h > 50) return;
+
+  if(!currentProject.sizes) currentProject.sizes = {};
+  if(!currentProject.sizes[typeKey]) currentProject.sizes[typeKey] = {};
+  if(!GLOBAL_SIZES[typeKey]) GLOBAL_SIZES[typeKey] = {};
+  currentProject.sizes[typeKey].w = w;
+  currentProject.sizes[typeKey].h = h;
+  GLOBAL_SIZES[typeKey].w = w;
+  GLOBAL_SIZES[typeKey].h = h;
+  currentProject.ids.forEach(it=>{
+    if(it.template === typeKey){
+      it.final_front = null;
+      it.final_back = null;
+    }
+  });
+  saveGlobalSizes();
+  persistProjects();
+  renderTypeIconsRow();
+  renderLivePreview();
 }
 
 function applyTypeSize(typeKey){
   if(!currentProject) return;
   const wInput = $('input-w-' + typeKey);
   const hInput = $('input-h-' + typeKey);
-  const newW = parseFloat(wInput.value);
-  const newH = parseFloat(hInput.value);
+  const newW = parseFloat(wInput.value); /* الطول */
+  const newH = parseFloat(hInput.value); /* العرض */
 
   if(!newW || !newH || newW < 0.1 || newH < 0.1 || newW > 50 || newH > 50){
     showToast('قيمة غير صحيحة (0.1 - 50 سم)', '⚠️');
@@ -1785,7 +1987,6 @@ function getSortedItems(){
   });
 }
 
-/* ★★★ العرض: نستخدم final_ إذا موجود، وإلا الصورة الأصلية بـ cover ★★★ */
 function buildCroppedImageHTML(pair, side){
   const finalKey = 'final_' + side;
   if(pair[finalKey]){
@@ -1793,7 +1994,7 @@ function buildCroppedImageHTML(pair, side){
   }
   const img = pair[side];
   if(!img) return '';
-  return `<div class="cropped-img-wrap"><img src="${img}" alt="" style="object-fit:cover"></div>`;
+  return `<div class="cropped-img-wrap"><img src="${img}" alt=""></div>`;
 }
 
 function buildSheetHTML(editable){
@@ -1836,7 +2037,7 @@ function buildSheetHTML(editable){
       const limited = photoItems.slice(0, photoCount);
       const cells = [];
       const size = getEffectiveSize('photos');
-      const aspect = `${size.w}/${size.h}`;
+      const aspect = `${size.w} / ${size.h}`;
       for(let i=0;i<photoCount;i++){
         const pair = limited[i];
         if(pair){
@@ -1863,21 +2064,26 @@ function buildSheetHTML(editable){
 
     if(tpl.kind === 'pair'){
       const size = getEffectiveSize(it.template);
-      const aspect = `${size.w}/${size.h}`;
+      
+      /* ★ التعديل الأهم: استخدام w للعرض و h للارتفاع مباشرة، وإزالة الـ grid ★ */
+      const finalW = size.w > 0 ? size.w : 3.5;
+      const finalH = size.h > 0 ? size.h : 2.0;
+      const finalAspect = `${finalW} / ${finalH}`;
 
       const frontHtml = (it.hideFront || !it.front)
-        ? `<div class="s-img ${it.hideFront ? 'hidden-card' : 'blank'}" style="aspect-ratio:${aspect}"></div>`
-        : `<div class="s-img" style="aspect-ratio:${aspect}">${buildCroppedImageHTML(it,'front')}</div>`;
+        ? `<div class="s-img ${it.hideFront ? 'hidden-card' : 'blank'}" style="aspect-ratio:${finalAspect}; width: 45%; max-width: 100%;"></div>`
+        : `<div class="s-img" style="aspect-ratio:${finalAspect}; width: 45%; max-width: 100%;">${buildCroppedImageHTML(it,'front')}</div>`;
+        
       const backHtml = (it.hideBack || !it.back)
-        ? `<div class="s-img ${it.hideBack ? 'hidden-card' : 'blank'}" style="aspect-ratio:${aspect}"></div>`
-        : `<div class="s-img" style="aspect-ratio:${aspect}">${buildCroppedImageHTML(it,'back')}</div>`;
+        ? `<div class="s-img ${it.hideBack ? 'hidden-card' : 'blank'}" style="aspect-ratio:${finalAspect}; width: 45%; max-width: 100%;"></div>`
+        : `<div class="s-img" style="aspect-ratio:${finalAspect}; width: 45%; max-width: 100%;">${buildCroppedImageHTML(it,'back')}</div>`;
 
       html.push(`
         <div class="sheet-item" data-id="${it.id}"
              ${editable ? `draggable="true"` : ''}
              style="margin-bottom:${ITEM_GAP_PX}px">
           ${editable ? `<div class="drag-handle"><i class="bi bi-grip-vertical"></i></div>` : ''}
-          <div class="sheet-item-pair" style="gap:${PAIR_GAP_PX}px">${frontHtml}${backHtml}</div>
+          <div class="sheet-item-pair" style="gap:${PAIR_GAP_PX}px; display: flex; justify-content: flex-start;">${frontHtml}${backHtml}</div>
         </div>
       `);
     }
@@ -1960,6 +2166,14 @@ function saveCurrentProject(){
   if(!currentProject) return;
   persistProjects();
   showToast('تم حفظ المشروع','💾');
+}
+
+function updateCopyCount(){
+  if(!currentProject) return;
+  const v = parseInt($('copyCount').value) || 1;
+  currentProject.copyCount = Math.max(1, Math.min(99, v));
+  $('copyCount').value = currentProject.copyCount;
+  persistProjects();
 }
 
 function buildPrintableSheet(paperW, paperH){
@@ -2065,7 +2279,73 @@ function waitForImages(rootEl){
   });
 }
 
-async function previewOfficeFile(itemId){
+function openPrintWindow(){
+  if(!currentProject){ showToast('افتح مشروعاً أولاً','⚠️'); return; }
+  if(!currentProject.ids.length){ showToast('أضف عنصراً واحداً على الأقل','⚠️'); return; }
+
+  const paperMM = { A3:{w:297,h:420}, A4:{w:210,h:297}, A5:{w:148,h:210} };
+  const p = paperMM[currentProject.size] || paperMM.A4;
+  const copies = currentProject.copyCount || 1;
+  const sheetHtml = buildSheetHTML(false);
+
+  const win = window.open('', '_blank');
+  if(!win){ showToast('اسمح بالنوافذ المنبثقة للطباعة','⚠️'); return; }
+
+  let pagesHtml = '';
+  for(let i=0;i<copies;i++){
+    pagesHtml += `<div class="print-page">${sheetHtml}</div>`;
+  }
+
+  win.document.write(`
+    <!DOCTYPE html>
+    <html dir="rtl">
+    <head>
+      <meta charset="UTF-8">
+      <title>طباعة - ${escapeHtml(currentProject.name)}</title>
+      <style>
+        @page { size: ${p.w}mm ${p.h}mm; margin: 0; }
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI','Tajawal',sans-serif}
+        body{background:#fff}
+        .print-page{
+          width:${p.w}mm; height:${p.h}mm;
+          background:${currentProject.color};
+          padding:10px; box-sizing:border-box;
+          display:flex; flex-direction:column;
+          overflow:hidden;
+          page-break-after:always;
+          break-after:page;
+        }
+        .print-page:last-child{page-break-after:auto;break-after:auto}
+        .sheet-item{display:flex;flex-direction:column;margin-bottom:${ITEM_GAP_PX}px}
+        .sheet-item:last-child{margin-bottom:0}
+        .sheet-item-pair{display:flex;flex-wrap:wrap;gap:${PAIR_GAP_PX}px}
+        .sheet-photos-grid{display:grid;gap:${PHOTO_GAP_PX}px}
+        .sheet-photos-grid.photos-4{grid-template-columns:repeat(2,1fr)}
+        .sheet-photos-grid.photos-6{grid-template-columns:repeat(2,1fr)}
+        .sheet-photos-grid.photos-9{grid-template-columns:repeat(3,1fr)}
+        .s-img{background:#fff;display:block;overflow:hidden;position:relative}
+        .s-img.blank{background:#fff}
+        .s-img.hidden-card{background:#fff !important}
+        .full-image-wrap{position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center;overflow:hidden}
+        .full-image-wrap img{width:100%;height:100%;object-fit:contain;display:block}
+        .cropped-img-wrap{position:absolute;inset:0;width:100%;height:100%;overflow:hidden}
+        .cropped-img-wrap img{width:100%;height:100%;object-fit:cover;display:block}
+        .drag-handle{display:none !important}
+        .sheet-office{background:#f8fafc;border:1px dashed #cbd5e1;border-radius:8px;padding:12px;text-align:center}
+        .sheet-office .of-ico{font-size:28px;margin-bottom:6px}
+        .sheet-office .of-name{font-size:12px;font-weight:900;color:#1e293b;margin-bottom:4px}
+        .sheet-office .of-meta{font-size:10px;color:#64748b}
+        @media print{ body{background:#fff} .print-page{box-shadow:none} }
+      </style>
+    </head>
+    <body>${pagesHtml}</body>
+    </html>
+  `);
+  win.document.close();
+  setTimeout(()=>{ win.focus(); win.print(); }, 600);
+}
+
+function previewOfficeFile(itemId){
   const item = currentProject.ids.find(it => it.id === itemId);
   if(!item) return;
 
@@ -2079,30 +2359,37 @@ async function previewOfficeFile(itemId){
   if(ext === 'pdf'){
     try{
       const arrayBuffer = dataURLToArrayBuffer(item.fileData);
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      body.innerHTML = '';
-      for(let i = 1; i <= pdf.numPages; i++){
-        const page = await pdf.getPage(i);
-        const viewport = page.getViewport({ scale: 1.5 });
-        const canvas = document.createElement('canvas');
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        canvas.className = 'office-page-canvas';
-        const ctx = canvas.getContext('2d');
-        await page.render({ canvasContext: ctx, viewport }).promise;
-
-        const pageNum = document.createElement('div');
-        pageNum.className = 'office-page-num';
-        pageNum.textContent = `صفحة ${i} / ${pdf.numPages}`;
-
-        body.appendChild(pageNum);
-        body.appendChild(canvas);
-      }
+      pdfjsLib.getDocument({ data: arrayBuffer }).promise.then(pdf=>{
+        body.innerHTML = '';
+        const renderPage = (i)=>{
+          if(i > pdf.numPages) return;
+          pdf.getPage(i).then(page=>{
+            const viewport = page.getViewport({ scale: 1.5 });
+            const canvas = document.createElement('canvas');
+            canvas.width = viewport.width;
+            canvas.height = viewport.height;
+            canvas.className = 'office-page-canvas';
+            const ctx = canvas.getContext('2d');
+            page.render({ canvasContext: ctx, viewport }).promise.then(()=>{
+              const pageNum = document.createElement('div');
+              pageNum.className = 'office-page-num';
+              pageNum.textContent = `صفحة ${i} / ${pdf.numPages}`;
+              body.appendChild(pageNum);
+              body.appendChild(canvas);
+              renderPage(i+1);
+            });
+          });
+        };
+        renderPage(1);
+      }).catch(err=>{
+        console.error(err);
+        body.innerHTML = `<div style="color:#fff;text-align:center;padding:40px">تعذّر عرض PDF.</div>`;
+      });
     }catch(err){
       console.error(err);
-      body.innerHTML = `<div style="color:#fff;text-align:center;padding:40px">تعذّر عرض PDF. يمكنك تنزيله وطباعته من المتصفح.</div>`;
+      body.innerHTML = `<div style="color:#fff;text-align:center;padding:40px">تعذّر عرض PDF.</div>`;
     }
-  } else if(ext === 'doc' || ext === 'docx' || ext === 'ppt' || ext === 'pptx' || ext === 'xls' || ext === 'xlsx'){
+  } else {
     body.innerHTML = `
       <div style="color:#fff;text-align:center;padding:40px;max-width:500px">
         <div style="font-size:60px;margin-bottom:16px">📄</div>
@@ -2143,147 +2430,16 @@ function openOfficeFileInNewTab(itemId){
     <body style="margin:0;font-family:sans-serif;background:#f8fafc;padding:20px;text-align:center">
       <div style="margin-bottom:16px;padding:14px;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.08)">
         <div style="font-size:16px;font-weight:900;color:#1e293b">${escapeHtml(item.fileName)}</div>
-        <div style="font-size:12px;color:#64748b;margin-top:4px">اضغط تنزيل ثم افتح الملف في برنامجه الأصلي لطباعته بكل صفحاته</div>
-        <a href="${item.fileData}" download="${escapeHtml(item.fileName)}"
-           style="display:inline-block;margin-top:12px;padding:12px 28px;background:linear-gradient(135deg,#c8a45c,#a17c3a);color:#fff;text-decoration:none;border-radius:10px;font-weight:900">
-          ⬇️ تنزيل الملف
-        </a>
+        <div style="font-size:12px;color:#64748b;margin-top:4px">اضغط تنزيل ثم افتح الملف في برنامجه الأصلي لطباعته</div>
+        <a href="${item.fileData}" download="${escapeHtml(item.fileName)}" style="display:inline-block;margin-top:12px;padding:12px 28px;background:linear-gradient(135deg,#c8a45c,#a17c3a);color:#fff;text-decoration:none;border-radius:10px;font-weight:900">تنزيل الملف</a>
       </div>
     </body></html>
   `);
   win.document.close();
 }
 
-function updateCopyCount(){
-  if(!currentProject) return;
-  const val = parseInt($('copyCount').value) || 1;
-  currentProject.copyCount = Math.max(1, Math.min(99, val));
-  $('copyCount').value = currentProject.copyCount;
-  persistProjects();
-  showToast(`عدد النسخ: ${currentProject.copyCount}`, '📄');
-}
-
-function openPrintWindow(){
-  if(!currentProject){ showToast('افتح مشروعاً أولاً','⚠️'); return; }
-  if(!currentProject.ids.length){ showToast('أضف عنصراً واحداً على الأقل','⚠️'); return; }
-
-  const sizeKey = (currentProject.size || 'A4').toUpperCase();
-  const paperMM = { A3:{w:297,h:420}, A4:{w:210,h:297}, A5:{w:148,h:210} };
-  const p = paperMM[sizeKey] || paperMM.A4;
-
-  const officeItems = currentProject.ids.filter(it => it.template === 'office');
-  const nonOfficeItems = currentProject.ids.filter(it => it.template !== 'office');
-
-  if(officeItems.length && !nonOfficeItems.length){
-    printOfficeFiles(officeItems);
-    return;
-  }
-
-  const copyCount = currentProject.copyCount || 1;
-  const tempProject = { ...currentProject, ids: nonOfficeItems };
-  const paperHtml = buildSheetHTMLForProject(tempProject, false);
-  
-  let pagesHtml = '';
-  for(let i = 0; i < copyCount; i++){
-    pagesHtml += `<div class="print-page" style="page-break-after: always; display: flex; align-items: center; justify-content: center;">
-      <div style="width: ${p.w}mm; height: ${p.h}mm; background: #fff; box-sizing: border-box; padding: 10px; display: flex; flex-direction: column;">
-        ${paperHtml}
-      </div>
-    </div>`;
-  }
-
-  const printOverlay = document.createElement('div');
-  printOverlay.id = 'customPrintOverlay';
-  printOverlay.style.cssText = `
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(15, 23, 42, 0.95); z-index: 10000;
-    display: flex; flex-direction: column; align-items: center; overflow-y: auto;
-  `;
-
-  printOverlay.innerHTML = `
-    <div style="position: sticky; top: 0; width: 100%; background: #fff; padding: 15px; display: flex; justify-content: center; gap: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 10001;">
-      <button onclick="window.print()" style="padding: 15px 40px; border-radius: 12px; border: none; background: #2563eb; color: white; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(37,99,235,0.4); display: flex; align-items: center; gap: 8px;">
-        <i class="bi bi-printer-fill"></i> تنفيذ الطباعة الآن
-      </button>
-      <button onclick="document.getElementById('customPrintOverlay').remove()" style="padding: 15px 30px; border-radius: 12px; border: none; background: #ef4444; color: white; font-size: 16px; font-weight: bold; cursor: pointer;">
-        ✕ إلغاء
-      </button>
-    </div>
-    <div id="printPreviewArea" style="background: #fff; margin: 20px; box-shadow: 0 0 20px rgba(0,0,0,0.3); width: ${p.w}mm; min-height: ${p.h}mm; box-sizing: border-box;">
-      ${pagesHtml}
-    </div>
-    <style>
-      @media print {
-        body * { visibility: hidden; }
-        #customPrintOverlay, #customPrintOverlay * { visibility: visible; }
-        #customPrintOverlay { position: absolute; left: 0; top: 0; background: transparent; }
-        #customPrintOverlay div[style*="sticky"] { display: none !important; }
-        #printPreviewArea { margin: 0 !important; box-shadow: none !important; width: 100% !important; padding: 0 !important; }
-        .print-page { page-break-after: always; display: flex; align-items: center; justify-content: center; }
-        .print-page:last-child { page-break-after: auto; }
-        @page { size: ${sizeKey} portrait; margin: 0; }
-      }
-    </style>
-  `;
-
-  document.body.appendChild(printOverlay);
-
-  if(officeItems.length){
-    setTimeout(()=>{ printOfficeFiles(officeItems); }, 600);
-  }
-}
-
-function buildSheetHTMLForProject(project, editable){
-  const savedCurrent = currentProject;
-  currentProject = project;
-  const html = buildSheetHTML(editable);
-  currentProject = savedCurrent;
-  return html;
-}
-
-function printOfficeFiles(officeItems){
-  officeItems.forEach(item=>{
-    const ext = (item.fileExt || '').toLowerCase();
-    if(ext === 'pdf'){
-      const win = window.open('', '_blank');
-      if(!win) return;
-      win.document.write(`
-        <html><head><title>${escapeHtml(item.fileName)}</title>
-        <style>body{margin:0;font-family:sans-serif;background:#111}</style></head>
-        <body>
-          <div style="background:#fff;padding:12px;text-align:center">
-            <button onclick="document.getElementById('f').contentWindow.focus(); document.getElementById('f').contentWindow.print();"
-              style="padding:12px 28px;border:none;border-radius:10px;background:#c8a45c;color:#fff;font-size:14px;font-weight:900;cursor:pointer">
-              🖨️ طباعة الملف
-            </button>
-            <a href="${item.fileData}" download="${escapeHtml(item.fileName)}"
-              style="margin-left:10px;padding:12px 20px;background:#e2e8f0;color:#1e293b;text-decoration:none;border-radius:10px;font-weight:900;display:inline-block">
-              ⬇️ تنزيل
-            </a>
-          </div>
-          <iframe id="f" src="${item.fileData}" style="width:100%;height:calc(100vh - 60px);border:none"></iframe>
-        </body></html>
-      `);
-      win.document.close();
-    } else {
-      openOfficeFileInNewTab(item.id);
-    }
-  });
-}
-
-document.addEventListener('keydown', function(e){
-  const isCtrlP = (e.ctrlKey || e.metaKey) && (e.key === 'p' || e.key === 'P');
-  if(!isCtrlP) return;
-  e.preventDefault(); e.stopPropagation();
-  if(currentProject && currentProject.ids && currentProject.ids.length){
-    openPrintWindow();
-  } else {
-    showToast('افتح مشروعاً فيه عناصر للطباعة','⚠️');
-  }
-  return false;
-}, true);
-
 loadProjects();
 </script>
+
 </body>
 </html>
